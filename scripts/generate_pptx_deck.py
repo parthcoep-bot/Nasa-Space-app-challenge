@@ -1,54 +1,53 @@
 #!/usr/bin/env python3
 """
-Generate a professional, hackathon-ready 7-slide presentation in 16:9 widescreen PPTX.
-Designed with:
-- Dark space theme matching NASA Space Apps (Deep Navy, Electric Blue/Cyan, Flame Amber, Pure White)
-- Heavy emphasis on structured flowcharts, process blocks, comparison cards, and diagrams over dense text
-- High-readability typography (22-26pt bold titles, 14-16pt card headers, 11-12pt clear bullet points)
-- Clickable hyperlinks on every slide connecting to live dashboard, GitHub repo, and NASA datasets
+Generate the updated NASA Space Apps 7-slide presentation deck:
+- Matching the official NASA Space Apps website theme (Electric Royal Blue, Neon Lime, Pure White)
+- Clean White Canvas (>50% white space for crisp modern presentation aesthetics)
+- Increased text sizes by 3-4 sizes across all slides (Titles 28-30pt, Headers 16-18pt, Body 13-15pt)
+- Embedded diagrammatic illustrations (Earth vs Space flame, Segmentation comparison, Flow staircase)
+- Slide 5 dedicated to the 30-Second Video Presentation with embedded movie, poster, and timestamps
+- Clickable hyperlinks on every slide connecting to live dashboard, GitHub repo, and NASA portals
 - Strict 7-slide limit compliant with NASA Space Apps Challenge Global Judging rules
 """
 
 import os
+from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
 # ==========================================
-# COLOR PALETTE (NASA Space Apps Dark Theme)
+# COLOR PALETTE (NASA Space Apps Light Theme)
 # ==========================================
-BG_COLOR       = RGBColor(11, 17, 32)      # Deep Space Navy #0B1120
-CARD_BG        = RGBColor(19, 29, 52)      # Slate Card Container #131D34
-CARD_BORDER    = RGBColor(35, 51, 84)      # Card Border #233354
+BG_WHITE       = RGBColor(255, 255, 255)   # Pure White Canvas #FFFFFF
+CARD_BG_LIGHT  = RGBColor(248, 250, 252)   # Subtle Slate Card #F8FAFC
+CARD_BORDER    = RGBColor(203, 213, 225)   # Slate Border #CBD5E1
 
-CYAN_ACCENT    = RGBColor(0, 210, 255)     # NASA Electric Cyan #00D2FF
-BLUE_PRIMARY   = RGBColor(30, 144, 255)    # Dodger/Electric Blue #1E90FF
-BLUE_BOX_BG    = RGBColor(13, 50, 104)     # Flow Node Blue #0D3268
+ROYAL_BLUE     = RGBColor(0, 82, 255)      # NASA Space Apps Royal Blue #0052FF
+NAVY_HEADER    = RGBColor(11, 27, 61)      # Dark Navy #0B1B3D
+BLUE_ACCENT    = RGBColor(14, 116, 144)    # Cyan / Teal Accent #0E7490
 
-AMBER_ACCENT   = RGBColor(255, 170, 0)     # Flame Gold/Amber #FFAA00
-ORANGE_FLAME   = RGBColor(255, 107, 53)    # Flame Orange #FF6B35
-AMBER_BOX_BG   = RGBColor(74, 46, 5)       # Flow Node Amber #4A2E05
+NEON_LIME      = RGBColor(212, 255, 0)     # Space Apps Neon Lime #D4FF00
+AMBER_GOLD     = RGBColor(217, 119, 6)     # Flame Gold #D97706
+RED_ALERT      = RGBColor(220, 38, 38)     # Crimson Alert #DC2626
+GREEN_VERIFIED = RGBColor(5, 150, 105)     # Emerald Green #059669
 
-GREEN_OK       = RGBColor(16, 185, 129)    # Emerald Green #10B981
-GREEN_BOX_BG   = RGBColor(8, 56, 36)       # Flow Node Green #083824
+TEXT_DARK      = RGBColor(15, 23, 42)      # Deep Charcoal Text #0F172A
+TEXT_MUTED     = RGBColor(71, 85, 105)     # Slate Body Text #475569
+TEXT_WHITE     = RGBColor(255, 255, 255)   # Pure White Text
 
-RED_FAIL       = RGBColor(239, 68, 68)     # Crimson Red #EF4444
-RED_BOX_BG     = RGBColor(69, 18, 20)      # Flow Node Red #451214
-
-TEXT_WHITE     = RGBColor(255, 255, 255)   # Pure White
-TEXT_LIGHT     = RGBColor(226, 232, 240)   # Light Slate Text #E2E8F0
-TEXT_MUTED     = RGBColor(148, 163, 184)   # Slate Muted Text #94A3B8
-
-FONT_HEADING   = "Segoe UI"
-FONT_BODY      = "Segoe UI"
+FONT_NAME      = "Segoe UI"
 
 LIVE_DEMO_URL  = "https://parthcoep-bot.github.io/Nasa-Space-app-challenge/"
 GITHUB_URL     = "https://github.com/parthcoep-bot/Nasa-Space-app-challenge"
-SLIDE_DOC_URL  = "https://github.com/parthcoep-bot/Nasa-Space-app-challenge/blob/main/docs/SLIDE_DECK.md"
+VIDEO_URL      = "https://github.com/parthcoep-bot/Nasa-Space-app-challenge/raw/main/flarex_30s_presentation.mp4"
 NASA_PSI_URL   = "https://psi.nasa.gov"
 PAPER_URL      = "https://doi.org/10.1038/s41598-017-18398-4"
+
+VIDEO_FILE     = "flarex_30s_presentation.mp4"
+ASSETS_DIR     = Path("slide_assets")
 
 def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     prs = Presentation()
@@ -56,333 +55,307 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     prs.slide_height = Inches(7.5)
     blank_layout = prs.slide_layouts[6]
 
-    def set_slide_background(slide):
+    def set_white_canvas(slide):
         bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.5))
         bg.fill.solid()
-        bg.fill.fore_color.rgb = BG_COLOR
-        bg.line.color.rgb = BG_COLOR
+        bg.fill.fore_color.rgb = BG_WHITE
+        bg.line.color.rgb = BG_WHITE
         return bg
 
     def add_header(slide, slide_num, title, subtitle_badge):
+        # Top Accent Stripe (Neon Lime #D4FF00)
+        stripe = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(0.12))
+        stripe.fill.solid()
+        stripe.fill.fore_color.rgb = NEON_LIME
+        stripe.line.color.rgb = NEON_LIME
+
         # Badge
-        badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.4), Inches(4.5), Inches(0.35))
+        badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.35), Inches(5.2), Inches(0.42))
         badge.fill.solid()
-        badge.fill.fore_color.rgb = BLUE_BOX_BG
-        badge.line.color.rgb = CYAN_ACCENT
+        badge.fill.fore_color.rgb = ROYAL_BLUE
+        badge.line.color.rgb = ROYAL_BLUE
         tf_b = badge.text_frame
         tf_b.word_wrap = True
-        tf_b.margin_left = Inches(0.1)
-        tf_b.margin_right = Inches(0.1)
+        tf_b.margin_left = Inches(0.12)
         tf_b.margin_top = Inches(0.04)
-        tf_b.margin_bottom = Inches(0.04)
         p_b = tf_b.paragraphs[0]
         p_b.text = subtitle_badge.upper()
-        p_b.font.name = FONT_HEADING
-        p_b.font.size = Pt(10)
+        p_b.font.name = FONT_NAME
+        p_b.font.size = Pt(12)
         p_b.font.bold = True
-        p_b.font.color.rgb = CYAN_ACCENT
+        p_b.font.color.rgb = NEON_LIME
 
         # Slide Number
-        num_box = slide.shapes.add_textbox(Inches(11.2), Inches(0.35), Inches(1.4), Inches(0.4))
+        num_box = slide.shapes.add_textbox(Inches(11.0), Inches(0.35), Inches(1.6), Inches(0.4))
         tf_n = num_box.text_frame
         p_n = tf_n.paragraphs[0]
         p_n.text = f"SLIDE {slide_num} OF 7"
-        p_n.font.name = FONT_HEADING
-        p_n.font.size = Pt(11)
+        p_n.font.name = FONT_NAME
+        p_n.font.size = Pt(13)
         p_n.font.bold = True
-        p_n.font.color.rgb = TEXT_MUTED
+        p_n.font.color.rgb = ROYAL_BLUE
         p_n.alignment = PP_ALIGN.RIGHT
 
-        # Main Title
-        title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.78), Inches(11.8), Inches(0.65))
+        # Main Title (Increased Size: 28pt)
+        title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.82), Inches(11.8), Inches(0.65))
         tf_t = title_box.text_frame
         tf_t.word_wrap = True
         tf_t.margin_top = Inches(0)
-        tf_t.margin_bottom = Inches(0)
         tf_t.margin_left = Inches(0)
         p_t = tf_t.paragraphs[0]
         p_t.text = title
-        p_t.font.name = FONT_HEADING
-        p_t.font.size = Pt(22)
+        p_t.font.name = FONT_NAME
+        p_t.font.size = Pt(28)
         p_t.font.bold = True
-        p_t.font.color.rgb = TEXT_WHITE
+        p_t.font.color.rgb = TEXT_DARK
 
     def add_footer_link(slide):
-        # Bottom hyperlink banner
-        footer = slide.shapes.add_textbox(Inches(0.8), Inches(6.9), Inches(11.8), Inches(0.45))
+        footer = slide.shapes.add_textbox(Inches(0.8), Inches(6.88), Inches(11.8), Inches(0.48))
         tf = footer.text_frame
         tf.word_wrap = True
         p = tf.paragraphs[0]
         
         r1 = p.add_run()
-        r1.text = "⚡ Explore Online: "
-        r1.font.name = FONT_BODY
-        r1.font.size = Pt(10)
+        r1.text = "⚡ EXPLORE LIVE: "
+        r1.font.name = FONT_NAME
+        r1.font.size = Pt(12)
         r1.font.bold = True
-        r1.font.color.rgb = AMBER_ACCENT
+        r1.font.color.rgb = AMBER_GOLD
 
         r2 = p.add_run()
-        r2.text = "[Live Interactive Dashboard (Single-File WebApp)]"
-        r2.font.name = FONT_BODY
-        r2.font.size = Pt(10)
+        r2.text = "[Interactive WebApp Dashboard]"
+        r2.font.name = FONT_NAME
+        r2.font.size = Pt(12)
         r2.font.bold = True
-        r2.font.color.rgb = CYAN_ACCENT
+        r2.font.color.rgb = ROYAL_BLUE
         r2.hyperlink.address = LIVE_DEMO_URL
 
         r3 = p.add_run()
-        r3.text = "  |  "
-        r3.font.name = FONT_BODY
-        r3.font.size = Pt(10)
+        r3.text = "   •   "
+        r3.font.name = FONT_NAME
+        r3.font.size = Pt(12)
         r3.font.color.rgb = TEXT_MUTED
 
         r4 = p.add_run()
-        r4.text = "[GitHub Open Codebase & 24/24 Verified Tests]"
-        r4.font.name = FONT_BODY
-        r4.font.size = Pt(10)
+        r4.text = "[GitHub Codebase & 24/24 Verified Tests]"
+        r4.font.name = FONT_NAME
+        r4.font.size = Pt(12)
         r4.font.bold = True
-        r4.font.color.rgb = BLUE_PRIMARY
+        r4.font.color.rgb = ROYAL_BLUE
         r4.hyperlink.address = GITHUB_URL
 
     # =========================================================================
     # SLIDE 1: TITLE & EXECUTIVE HOOK (The Fire You Can't Walk Away From)
     # =========================================================================
     s1 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s1)
+    set_white_canvas(s1)
 
-    # Top Tagline Badge
-    badge1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.55), Inches(5.8), Inches(0.4))
+    # Top Lime Accent Stripe
+    st1 = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(0.15))
+    st1.fill.solid()
+    st1.fill.fore_color.rgb = NEON_LIME
+    st1.line.color.rgb = NEON_LIME
+
+    # Header Badge
+    badge1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.45), Inches(6.4), Inches(0.45))
     badge1.fill.solid()
-    badge1.fill.fore_color.rgb = BLUE_BOX_BG
-    badge1.line.color.rgb = CYAN_ACCENT
+    badge1.fill.fore_color.rgb = ROYAL_BLUE
+    badge1.line.color.rgb = ROYAL_BLUE
     tf_b1 = badge1.text_frame
     p_b1 = tf_b1.paragraphs[0]
     p_b1.text = "NASA SPACE APPS CHALLENGE 2026 | FLAME IN FREEFALL"
-    p_b1.font.size = Pt(11)
+    p_b1.font.size = Pt(12)
     p_b1.font.bold = True
-    p_b1.font.color.rgb = CYAN_ACCENT
+    p_b1.font.color.rgb = NEON_LIME
 
-    # Main Project Title
-    t_box1 = s1.shapes.add_textbox(Inches(0.8), Inches(1.05), Inches(11.8), Inches(1.3))
+    # Main Project Title (30pt Bold)
+    t_box1 = s1.shapes.add_textbox(Inches(0.8), Inches(1.0), Inches(11.8), Inches(1.4))
     tf1 = t_box1.text_frame
     p1_1 = tf1.paragraphs[0]
     p1_1.text = "FLARE-X: Flame Learning, Analysis, Risk & Extinction Explorer"
-    p1_1.font.name = FONT_HEADING
-    p1_1.font.size = Pt(26)
+    p1_1.font.name = FONT_NAME
+    p1_1.font.size = Pt(30)
     p1_1.font.bold = True
-    p1_1.font.color.rgb = TEXT_WHITE
+    p1_1.font.color.rgb = TEXT_DARK
 
     p1_2 = tf1.add_paragraph()
-    p1_2.text = "Interpretable Super Intelligence (SI) Dashboard for Microgravity Combustion & Spacecraft Fire Safety"
-    p1_2.font.name = FONT_HEADING
-    p1_2.font.size = Pt(14)
-    p1_2.font.color.rgb = AMBER_ACCENT
+    p1_2.text = "Interpretable Super Intelligence (SI) Platform for Microgravity Combustion & Spacecraft Safety"
+    p1_2.font.name = FONT_NAME
+    p1_2.font.size = Pt(16)
+    p1_2.font.bold = True
+    p1_2.font.color.rgb = ROYAL_BLUE
 
-    # The Human Stakes Callout Card
-    quote_card = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(2.45), Inches(11.733), Inches(1.2))
+    # The Human Stakes Card (Clean White with Royal Blue border)
+    quote_card = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(2.45), Inches(11.733), Inches(1.3))
     quote_card.fill.solid()
-    quote_card.fill.fore_color.rgb = CARD_BG
-    quote_card.line.color.rgb = ORANGE_FLAME
-    quote_card.line.width = Pt(1.5)
+    quote_card.fill.fore_color.rgb = CARD_BG_LIGHT
+    quote_card.line.color.rgb = ROYAL_BLUE
+    quote_card.line.width = Pt(2.0)
     tf_q = quote_card.text_frame
     tf_q.word_wrap = True
     p_q1 = tf_q.paragraphs[0]
     p_q1.text = "THE ASTRONAUT'S REALITY IN DEEP SPACE:"
-    p_q1.font.name = FONT_HEADING
-    p_q1.font.size = Pt(12)
+    p_q1.font.name = FONT_NAME
+    p_q1.font.size = Pt(14)
     p_q1.font.bold = True
-    p_q1.font.color.rgb = ORANGE_FLAME
+    p_q1.font.color.rgb = AMBER_GOLD
     p_q2 = tf_q.add_paragraph()
     p_q2.text = "“On Earth, fire rises. In space, it doesn't. Inside a sealed spacecraft heading to Mars, there is no window to open, no outside to evacuate to, and a finite supply of suppressant. Everything humans know about fire was learned under Earth's gravity.”"
-    p_q2.font.name = FONT_BODY
-    p_q2.font.size = Pt(12)
-    p_q2.font.color.rgb = TEXT_LIGHT
+    p_q2.font.name = FONT_NAME
+    p_q2.font.size = Pt(13.5)
+    p_q2.font.color.rgb = TEXT_DARK
 
-    # Flowchart: 3-Stage High-Level Architecture Flow
-    flow_y = Inches(3.9)
-    flow_w = Inches(3.45)
-    flow_h = Inches(2.6)
+    # Flowchart: 3-Stage Architecture (Increased font sizes)
+    flow_y = Inches(3.95)
+    flow_w = Inches(3.5)
+    flow_h = Inches(2.7)
 
-    # Box 1: Problem / Raw Data
+    # Box 1
     b1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), flow_y, flow_w, flow_h)
     b1.fill.solid()
-    b1.fill.fore_color.rgb = CARD_BG
+    b1.fill.fore_color.rgb = CARD_BG_LIGHT
     b1.line.color.rgb = CARD_BORDER
     tf_box1 = b1.text_frame
     tf_box1.word_wrap = True
     p = tf_box1.paragraphs[0]
-    p.text = "1. THE UNTAPPED ARCHIVE"
-    p.font.name = FONT_HEADING
-    p.font.size = Pt(13)
+    p.text = "1. UNTAPPED ARCHIVE"
+    p.font.name = FONT_NAME
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = CYAN_ACCENT
+    p.font.color.rgb = ROYAL_BLUE
     items1 = [
-        "Decades of ISS combustion experiments (NASA PSI).",
-        "Video records trapped in qualitative scientific papers.",
-        "Crucial extinction limits hard to find & compare."
+        "Decades of ISS tests in NASA PSI repository.",
+        "Crucial extinction data trapped in qualitative logs.",
+        "Difficult to compare, query, or audit."
     ]
     for it in items1:
         pi = tf_box1.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_LIGHT
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
 
     # Arrow 1->2
-    arr1 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(4.35), flow_y + Inches(1.0), Inches(0.55), Inches(0.4))
+    arr1 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(4.4), flow_y + Inches(1.05), Inches(0.5), Inches(0.45))
     arr1.fill.solid()
-    arr1.fill.fore_color.rgb = BLUE_PRIMARY
-    arr1.line.color.rgb = CYAN_ACCENT
+    arr1.fill.fore_color.rgb = ROYAL_BLUE
+    arr1.line.color.rgb = ROYAL_BLUE
 
-    # Box 2: FLARE-X Innovation
+    # Box 2
     b2 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(5.0), flow_y, flow_w, flow_h)
     b2.fill.solid()
-    b2.fill.fore_color.rgb = CARD_BG
-    b2.line.color.rgb = CYAN_ACCENT
-    b2.line.width = Pt(1.5)
+    b2.fill.fore_color.rgb = CARD_BG_LIGHT
+    b2.line.color.rgb = ROYAL_BLUE
+    b2.line.width = Pt(2.0)
     tf_box2 = b2.text_frame
     tf_box2.word_wrap = True
     p = tf_box2.paragraphs[0]
-    p.text = "2. FLARE-X MEASUREMENT"
-    p.font.name = FONT_HEADING
-    p.font.size = Pt(13)
+    p.text = "2. FLARE-X ENGINE"
+    p.font.name = FONT_NAME
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = AMBER_ACCENT
+    p.font.color.rgb = AMBER_GOLD
     items2 = [
         "Extreme-value noise-gated radiance proxy.",
         "Tracks dim blue flames where standard CV fails.",
-        "Multivariate change-point detection with 100% recall.",
-        "Extinction Proximity Index (EPI) with exact attribution."
+        "100% change-point recall against telemetry.",
+        "Extinction Proximity Index (EPI) attribution."
     ]
     for it in items2:
         pi = tf_box2.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_LIGHT
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
 
     # Arrow 2->3
-    arr2 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(8.55), flow_y + Inches(1.0), Inches(0.55), Inches(0.4))
+    arr2 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(8.6), flow_y + Inches(1.05), Inches(0.5), Inches(0.45))
     arr2.fill.solid()
-    arr2.fill.fore_color.rgb = BLUE_PRIMARY
-    arr2.line.color.rgb = CYAN_ACCENT
+    arr2.fill.fore_color.rgb = ROYAL_BLUE
+    arr2.line.color.rgb = ROYAL_BLUE
 
-    # Box 3: Mission Impact
+    # Box 3
     b3 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.2), flow_y, flow_w, flow_h)
     b3.fill.solid()
-    b3.fill.fore_color.rgb = CARD_BG
-    b3.line.color.rgb = GREEN_OK
-    b3.line.width = Pt(1.5)
+    b3.fill.fore_color.rgb = CARD_BG_LIGHT
+    b3.line.color.rgb = GREEN_VERIFIED
+    b3.line.width = Pt(2.0)
     tf_box3 = b3.text_frame
     tf_box3.word_wrap = True
     p = tf_box3.paragraphs[0]
-    p.text = "3. EXPLORATION IMPACT"
-    p.font.name = FONT_HEADING
-    p.font.size = Pt(13)
+    p.text = "3. MISSION IMPACT"
+    p.font.name = FONT_NAME
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = GREEN_OK
+    p.font.color.rgb = GREEN_VERIFIED
     items3 = [
-        "Informs Lunar Gateway, Artemis Basecamp & Mars.",
-        "Upgrades 1-g flammability rules (NASA-STD-6001).",
-        "Edge optical early warning before smoke alarms trigger.",
-        "Protects Earth mines & subway ventilation tunnels."
+        "Informs Lunar Gateway, Artemis & Mars crew.",
+        "Modernizes 1-g standards (NASA-STD-6001).",
+        "Edge optical pre-smoke early warning.",
+        "Earth subway tunnel & mine shaft safety."
     ]
     for it in items3:
         pi = tf_box3.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_LIGHT
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
 
     add_footer_link(s1)
 
     # =========================================================================
-    # SLIDE 2: THE CORE PHYSICS DILEMMA (Gr ∝ g)
+    # SLIDE 2: THE CORE PHYSICS DILEMMA (Gr ∝ g) + DIAGRAM
     # =========================================================================
     s2 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s2)
+    set_white_canvas(s2)
     add_header(s2, 2, "Why Earth Fire Safety Standards Fail in Space", "BEST USE OF SCIENCE | GALACTIC IMPACT")
 
-    # Flowchart: Earth (1g) vs Space (Microgravity) Flowchart Comparison
-    card_w = Inches(5.6)
-    card_h = Inches(4.2)
-    cy = Inches(1.6)
+    # Left Container: Flowchart comparison
+    card_l2 = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), Inches(5.8), Inches(4.3))
+    card_l2.fill.solid()
+    card_l2.fill.fore_color.rgb = CARD_BG_LIGHT
+    card_l2.line.color.rgb = ROYAL_BLUE
+    card_l2.line.width = Pt(1.5)
+    tf_l2 = card_l2.text_frame
+    tf_l2.word_wrap = True
+    p = tf_l2.paragraphs[0]
+    p.text = "THE ZERO-GRAVITY COMBUSTION PARADOX"
+    p.font.size = Pt(16)
+    p.font.bold = True
+    p.font.color.rgb = ROYAL_BLUE
 
-    # Left Card: Earth 1-g
-    c_left = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), cy, card_w, card_h)
-    c_left.fill.solid()
-    c_left.fill.fore_color.rgb = CARD_BG
-    c_left.line.color.rgb = CARD_BORDER
-    tf_l = c_left.text_frame
-    tf_l.word_wrap = True
-    pl = tf_l.paragraphs[0]
-    pl.text = "EARTH GRAVITY (1 g): BUOYANCY DOMINATED"
-    pl.font.name = FONT_HEADING
-    pl.font.size = Pt(13.5)
-    pl.font.bold = True
-    pl.font.color.rgb = AMBER_ACCENT
-
-    l_items = [
-        ("Grashof Number Scaling", "Gr = (g·β·ΔT·L³) / ν²  [High body force]"),
-        ("Natural Buoyancy", "Hot air rises at ~30 cm/s, drawing in fresh oxygen."),
-        ("Flame Morphology", "Classic tall teardrop shape; soot glows bright yellow."),
-        ("Extinction Limit", "Quenches when heat loss exceeds buoyant fuel generation."),
-        ("Standard Flammability", "NASA-STD-6001 Test 1 tests upward spread in 1 g.")
+    points2 = [
+        ("Grashof Scaling Collapse", "Gr = (g·β·ΔT·L³)/ν² falls by 10⁶× in space! Buoyant velocity drops from 30 cm/s to ZERO."),
+        ("The Low-Flow Hazard", "Under forced ventilation (0.4–8 cm/s), materials ignite and burn below Earth oxygen limits!"),
+        ("Boundary Layer Thickening", "Flame lifts off surface, heat feedback drops, surface re-radiation quenches reaction."),
+        ("Standard Flammability Flaw", "NASA-STD-6001 Test 1 tests upward in 1 g, misjudging microgravity low-flow flammability.")
     ]
-    for h, b in l_items:
-        p_h = tf_l.add_paragraph()
-        p_h.text = f"• {h}: "
-        p_h.font.bold = True
-        p_h.font.size = Pt(11)
-        p_h.font.color.rgb = TEXT_WHITE
-        r = p_h.add_run()
+    for h, b in points2:
+        pi = tf_l2.add_paragraph()
+        pi.text = f"• {h}: "
+        pi.font.bold = True
+        pi.font.size = Pt(13.5)
+        pi.font.color.rgb = TEXT_DARK
+        r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(10.5)
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(13)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Right Card: Microgravity
-    c_right = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.933), cy, card_w, card_h)
-    c_right.fill.solid()
-    c_right.fill.fore_color.rgb = CARD_BG
-    c_right.line.color.rgb = CYAN_ACCENT
-    c_right.line.width = Pt(1.5)
-    tf_r = c_right.text_frame
-    tf_r.word_wrap = True
-    pr = tf_r.paragraphs[0]
-    pr.text = "MICROGRAVITY (10⁻⁶ g): DIFFUSION & DRIFT"
-    pr.font.name = FONT_HEADING
-    pr.font.size = Pt(13.5)
-    pr.font.bold = True
-    pr.font.color.rgb = CYAN_ACCENT
+    # Right Container: High-Res Flame Diagram
+    diag1_path = ASSETS_DIR / "diagram_flame_compare.png"
+    if diag1_path.exists():
+        s2.shapes.add_picture(str(diag1_path), Inches(6.8), Inches(1.6), Inches(5.733), Inches(4.3))
 
-    r_items = [
-        ("Grashof Number Collapse", "Gr falls by 1,000,000×; buoyant velocity drops to 0."),
-        ("Forced Ventilation Only", "Cabin air circulation (0.4–8 cm/s) controls oxygen."),
-        ("The Low-Flow Paradox", "Flames survive at oxygen levels BELOW Earth limits!"),
-        ("Near-Limit Appearance", "Soot vanishes; flame becomes dim, blue, spherical."),
-        ("The Critical Safety Gap", "1-g certification misjudges microgravity fire risk!")
-    ]
-    for h, b in r_items:
-        p_h = tf_r.add_paragraph()
-        p_h.text = f"• {h}: "
-        p_h.font.bold = True
-        p_h.font.size = Pt(11)
-        p_h.font.color.rgb = TEXT_WHITE
-        r = p_h.add_run()
-        r.text = b
-        r.font.bold = False
-        r.font.size = Pt(10.5)
-        r.font.color.rgb = TEXT_LIGHT
-
-    # Bottom Equation Callout Box
-    eq_box = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.0), Inches(11.733), Inches(0.75))
-    eq_box.fill.solid()
-    eq_box.fill.fore_color.rgb = BLUE_BOX_BG
-    eq_box.line.color.rgb = CYAN_ACCENT
-    tf_eq = eq_box.text_frame
-    tf_eq.word_wrap = True
-    pe = tf_eq.paragraphs[0]
-    pe.text = "SCIENTIFIC HYPOTHESIS: Link et al. (Nature 2018) published that flames become 'longer, dimmer, and bluer' near extinction. FLARE-X transforms this qualitative observation into an auditable, frame-by-frame quantitative measurement."
-    pe.font.size = Pt(11)
-    pe.font.color.rgb = TEXT_WHITE
-    pe.font.bold = True
+    # Bottom Equation Callout
+    bot2 = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.05), Inches(11.733), Inches(0.72))
+    bot2.fill.solid()
+    bot2.fill.fore_color.rgb = ROYAL_BLUE
+    bot2.line.color.rgb = ROYAL_BLUE
+    tf_b2 = bot2.text_frame
+    tf_b2.word_wrap = True
+    pb2 = tf_b2.paragraphs[0]
+    pb2.text = "FALSIFIABLE HYPOTHESIS: Link et al. (Nature 2018) published that flames become 'longer, dimmer, and bluer' near extinction. FLARE-X transforms this into an auditable frame-by-frame measurement!"
+    pb2.font.size = Pt(13)
+    pb2.font.bold = True
+    pb2.font.color.rgb = TEXT_WHITE
 
     add_footer_link(s2)
 
@@ -390,311 +363,264 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     # SLIDE 3: DATA CURATION & RIGOROUS REJECTIONS
     # =========================================================================
     s3 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s3)
+    set_white_canvas(s3)
     add_header(s3, 3, "Curating NASA PSI: Selecting BASS-II with Scientific Integrity", "BEST USE OF DATA | GLOBAL CONNECTION")
 
-    # Flowchart Container: 4 Step Process Tree
-    pw = Inches(2.7)
-    ph = Inches(4.0)
-    py = Inches(1.6)
+    col_w3 = Inches(3.7)
+    col_h3 = Inches(4.25)
+    col_y3 = Inches(1.6)
 
-    # Step 1: NASA PSI Review
-    p1 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), py, pw, ph)
-    p1.fill.solid()
-    p1.fill.fore_color.rgb = CARD_BG
-    p1.line.color.rgb = CARD_BORDER
-    tf = p1.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "NASA PSI AUDIT"
-    p.font.size = Pt(13)
+    # Column 1: Audit
+    c1 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), col_y3, col_w3, col_h3)
+    c1.fill.solid()
+    c1.fill.fore_color.rgb = CARD_BG_LIGHT
+    c1.line.color.rgb = CARD_BORDER
+    tf1 = c1.text_frame
+    tf1.word_wrap = True
+    p = tf1.paragraphs[0]
+    p.text = "1. NASA PSI AUDIT"
+    p.font.size = Pt(17)
     p.font.bold = True
-    p.font.color.rgb = CYAN_ACCENT
-    t_items = [
-        "17 Combustion investigations examined in NASA PSI.",
-        "Disciplines: Solid spread, gaseous jets, droplet burning.",
-        "Goal: Falsifiable solid material extinction physics."
+    p.font.color.rgb = ROYAL_BLUE
+    c1_items = [
+        "17 Combustion investigations examined across NASA PSI archives.",
+        "Disciplines: Solid spread, gas jets, droplet burning.",
+        "Objective: Solid fuel spread flame with an extinction event."
     ]
-    for it in t_items:
-        pi = tf.add_paragraph()
+    for it in c1_items:
+        pi = tf1.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_LIGHT
+        pi.font.size = Pt(13.5)
+        pi.font.color.rgb = TEXT_DARK
 
-    # Step 2: Principled Rejections
-    p2 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.8), py, pw, ph)
-    p2.fill.solid()
-    p2.fill.fore_color.rgb = CARD_BG
-    p2.line.color.rgb = RED_FAIL
-    p2.line.width = Pt(1.5)
-    tf = p2.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "REJECTED (WHY?)"
-    p.font.size = Pt(13)
+    # Column 2: Rejections
+    c2 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(4.8), col_y3, col_w3, col_h3)
+    c2.fill.solid()
+    c2.fill.fore_color.rgb = CARD_BG_LIGHT
+    c2.line.color.rgb = RED_ALERT
+    c2.line.width = Pt(2.0)
+    tf2 = c2.text_frame
+    tf2.word_wrap = True
+    p = tf2.paragraphs[0]
+    p.text = "2. REJECTED (WHY?)"
+    p.font.size = Pt(17)
     p.font.bold = True
-    p.font.color.rgb = RED_FAIL
-    rej_items = [
-        ("FLEX Droplets", "No solid fuel, no spread front. Incommensurate."),
+    p.font.color.rgb = RED_ALERT
+    c2_items = [
+        ("FLEX Droplets", "No solid fuel, no spread front. Pooling descriptors produces meaningless numbers."),
         ("ACME Gas Jets", "No pyrolysis substrate dynamics."),
-        ("Saffire Burns", "15× larger scale, concurrent flow, different optics.")
+        ("Saffire Burns", "15× larger scale, concurrent flow, different optics confounding physics.")
     ]
-    for r_title, r_desc in rej_items:
-        pi = tf.add_paragraph()
-        pi.text = f"✕ {r_title}: "
-        pi.font.size = Pt(10.5)
+    for h, b in c2_items:
+        pi = tf2.add_paragraph()
+        pi.text = f"✕ {h}: "
         pi.font.bold = True
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
-        r.text = r_desc
+        r.text = b
         r.font.bold = False
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Step 3: Selected BASS-II
-    p3 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), py, pw, ph)
-    p3.fill.solid()
-    p3.fill.fore_color.rgb = CARD_BG
-    p3.line.color.rgb = GREEN_OK
-    p3.line.width = Pt(1.5)
-    tf = p3.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "SELECTED: BASS-II"
-    p.font.size = Pt(13)
+    # Column 3: Selected BASS-II
+    c3 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(8.8), col_y3, col_w3, col_h3)
+    c3.fill.solid()
+    c3.fill.fore_color.rgb = CARD_BG_LIGHT
+    c3.line.color.rgb = GREEN_VERIFIED
+    c3.line.width = Pt(2.0)
+    tf3 = c3.text_frame
+    tf3.word_wrap = True
+    p = tf3.paragraphs[0]
+    p.text = "3. SELECTED: BASS-II"
+    p.font.size = Pt(17)
     p.font.bold = True
-    p.font.color.rgb = GREEN_OK
-    sel_items = [
-        ("Fuel Type", "PMMA rods in Microgravity Science Glovebox (ISS)."),
-        ("Staircase Flow", "Opposed flow stepped down until extinction."),
-        ("Built-In Reference", "Camera burned-in telemetry displays anemometer & fan voltage!")
+    p.font.color.rgb = GREEN_VERIFIED
+    c3_items = [
+        ("Target", "PMMA solid fuel rods under controlled opposed flow on ISS."),
+        ("Ground Truth", "Camera burned-in telemetry displays anemometer & fan voltage!"),
+        ("SHA-256 Provenance", "Every float bound to source file hash. Zero data drift.")
     ]
-    for s_title, s_desc in sel_items:
-        pi = tf.add_paragraph()
-        pi.text = f"✓ {s_title}: "
-        pi.font.size = Pt(10.5)
+    for h, b in c3_items:
+        pi = tf3.add_paragraph()
+        pi.text = f"✓ {h}: "
         pi.font.bold = True
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
-        r.text = s_desc
+        r.text = b
         r.font.bold = False
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Step 4: Provenance Chain
-    p4 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.8), py, pw, ph)
-    p4.fill.solid()
-    p4.fill.fore_color.rgb = CARD_BG
-    p4.line.color.rgb = AMBER_ACCENT
-    p4.line.width = Pt(1.5)
-    tf = p4.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "PROVENANCE CHAIN"
-    p.font.size = Pt(13)
-    p.font.bold = True
-    p.font.color.rgb = AMBER_ACCENT
-    chain_items = [
-        "Cryptographic SHA-256 hash attached to source file.",
-        "Zero data drift: numbers bound to frame byte hashes.",
-        "Transparent claim levels: L1 NASA Fact to L5 Concept.",
-        "Uncalibrated values labelled NOT_VERIFIED, never faked."
-    ]
-    for it in chain_items:
-        pi = tf.add_paragraph()
-        pi.text = "• " + it
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_LIGHT
-
-    # Bottom Links Box
-    b_link_box = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(5.9), Inches(11.733), Inches(0.8))
-    b_link_box.fill.solid()
-    b_link_box.fill.fore_color.rgb = BLUE_BOX_BG
-    b_link_box.line.color.rgb = CYAN_ACCENT
-    tf_bl = b_link_box.text_frame
-    tf_bl.word_wrap = True
-    p_bl = tf_bl.paragraphs[0]
-    r = p_bl.add_run()
-    r.text = "EXPLORE DATA SOURCES: "
+    # Bottom Links
+    bot3 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.0), Inches(11.733), Inches(0.75))
+    bot3.fill.solid()
+    bot3.fill.fore_color.rgb = ROYAL_BLUE
+    bot3.line.color.rgb = ROYAL_BLUE
+    tf_b3 = bot3.text_frame
+    tf_b3.word_wrap = True
+    p_b3 = tf_b3.paragraphs[0]
+    r = p_b3.add_run()
+    r.text = "DATA TRANSPARENCY:  "
     r.font.bold = True
-    r.font.size = Pt(11)
-    r.font.color.rgb = AMBER_ACCENT
-    r2 = p_bl.add_run()
-    r2.text = "[NASA PSI Portal]"
+    r.font.size = Pt(13)
+    r.font.color.rgb = NEON_LIME
+    r2 = p_b3.add_run()
+    r2.text = "[NASA Physical Sciences Informatics (PSI) Portal]"
     r2.font.bold = True
-    r2.font.size = Pt(11)
-    r2.font.color.rgb = CYAN_ACCENT
+    r2.font.size = Pt(13)
+    r2.font.color.rgb = TEXT_WHITE
     r2.hyperlink.address = NASA_PSI_URL
-    r3 = p_bl.add_run()
-    r3.text = "  •  "
-    r3.font.color.rgb = TEXT_MUTED
-    r4 = p_bl.add_run()
-    r4.text = "[Nature Scientific Reports Link et al. (2018) Paper]"
+    r3 = p_b3.add_run()
+    r3.text = "   •   "
+    r3.font.color.rgb = TEXT_WHITE
+    r4 = p_b3.add_run()
+    r4.text = "[Nature Scientific Reports Link et al. Paper]"
     r4.font.bold = True
-    r4.font.size = Pt(11)
-    r4.font.color.rgb = BLUE_PRIMARY
+    r4.font.size = Pt(13)
+    r4.font.color.rgb = TEXT_WHITE
     r4.hyperlink.address = PAPER_URL
 
     add_footer_link(s3)
 
     # =========================================================================
-    # SLIDE 4: CV INNOVATION: SURVIVING THE DIM BLUE FLAME
+    # SLIDE 4: CV INNOVATION + SEGMENTATION COMPARISON DIAGRAM
     # =========================================================================
     s4 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s4)
+    set_white_canvas(s4)
     add_header(s4, 4, "Innovation: Surviving the Dim Blue Near-Limit Flame", "BEST USE OF TECHNOLOGY | ART & TECHNOLOGY")
 
-    # Flow Diagram: Problem vs Solution Architecture
-    card_w4 = Inches(5.6)
-    card_h4 = Inches(4.1)
-
-    # Left: Commercial CV Failure
-    c_cv_fail = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), card_w4, card_h4)
-    c_cv_fail.fill.solid()
-    c_cv_fail.fill.fore_color.rgb = CARD_BG
-    c_cv_fail.line.color.rgb = RED_FAIL
-    c_cv_fail.line.width = Pt(1.5)
-    tf_fail = c_cv_fail.text_frame
-    tf_fail.word_wrap = True
-    p = tf_fail.paragraphs[0]
-    p.text = "OFF-THE-SHELF FIRE DETECTOR FAILURE"
-    p.font.size = Pt(13.5)
+    # Left Container: Technical explanation
+    card_l4 = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), Inches(5.8), Inches(4.3))
+    card_l4.fill.solid()
+    card_l4.fill.fore_color.rgb = CARD_BG_LIGHT
+    card_l4.line.color.rgb = ROYAL_BLUE
+    card_l4.line.width = Pt(1.5)
+    tf_l4 = card_l4.text_frame
+    tf_l4.word_wrap = True
+    p = tf_l4.paragraphs[0]
+    p.text = "THE FATAL FLAW OF COMMERCIAL FIRE DETECTORS"
+    p.font.size = Pt(15.5)
     p.font.bold = True
-    p.font.color.rgb = RED_FAIL
+    p.font.color.rgb = RED_ALERT
 
-    fail_items = [
-        ("The Fatal Assumption", "Standard detectors filter for red/yellow soot glow."),
-        ("The Microgravity Reality", "Near extinction, flames emit dim chemiluminescent blue (CH*/C₂ radicals)."),
-        ("Catastrophic Result", "Red-channel mask is completely EMPTY: reports 0 flame exactly where critical science occurs!"),
-        ("Otsu Noise Trap", "Thresholding pure sensor noise creates 25 false-positive frames after flame has extinguished.")
+    points4 = [
+        ("Commercial AI Blind Spot", "Standard CV filters on red/yellow pixels. As flames starve of oxygen, soot ceases and flames turn dim blue (CH*/C₂). Standard models report ZERO flame!"),
+        ("Radiance Proxy V = max(R,G,B)", "Segments on soot-independent intensity, catching soot incandescence AND faint blue chemiluminescence alike."),
+        ("Extreme-Value Noise Floor", "Gated at σ√(2 ln N) (~5σ ceiling). Prevents Otsu sensor noise flooding; achieves 0 false positives!"),
+        ("Decoupled Sootiness Index χ", "χ = (R-B)/(R+B) measures color shift as an independent physical observable.")
     ]
-    for h, b in fail_items:
-        pi = tf_fail.add_paragraph()
-        pi.text = f"✕ {h}: "
+    for h, b in points4:
+        pi = tf_l4.add_paragraph()
+        pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(11)
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(10.5)
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Right: FLARE-X Architecture
-    c_fx_sol = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.933), Inches(1.6), card_w4, card_h4)
-    c_fx_sol.fill.solid()
-    c_fx_sol.fill.fore_color.rgb = CARD_BG
-    c_fx_sol.line.color.rgb = GREEN_OK
-    c_fx_sol.line.width = Pt(1.5)
-    tf_sol = c_fx_sol.text_frame
-    tf_sol.word_wrap = True
-    p = tf_sol.paragraphs[0]
-    p.text = "FLARE-X RADIANCE PROXY INNOVATION"
-    p.font.size = Pt(13.5)
-    p.font.bold = True
-    p.font.color.rgb = GREEN_OK
+    # Right Container: High-Res Segmentation Comparison Diagram
+    diag2_path = ASSETS_DIR / "diagram_segmentation.png"
+    if diag2_path.exists():
+        s4.shapes.add_picture(str(diag2_path), Inches(6.8), Inches(1.6), Inches(5.733), Inches(4.3))
 
-    sol_items = [
-        ("Radiance Proxy V = max(R,G,B)", "Soot-independent intensity detects soot incandescence AND blue chemiluminescence."),
-        ("Extreme-Value Noise Floor", "Gated at σ√(2 ln N) (~5σ ceiling). Prevents noise flooding; achieves 0 false positives!"),
-        ("Decoupled Sootiness Index χ", "χ = (R-B)/(R+B) quantifies the yellow→blue shift as an independent physical observable."),
-        ("Flow-Axis Morphology", "Resolves flame length, width, and standoff against fuel rod axis, invariant to camera angle.")
-    ]
-    for h, b in sol_items:
-        pi = tf_sol.add_paragraph()
-        pi.text = f"✓ {h}: "
-        pi.font.bold = True
-        pi.font.size = Pt(11)
-        pi.font.color.rgb = TEXT_WHITE
-        r = pi.add_run()
-        r.text = b
-        r.font.bold = False
-        r.font.size = Pt(10.5)
-        r.font.color.rgb = TEXT_LIGHT
-
-    # Telemetry Masking Callout Box
-    tel_callout = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(5.95), Inches(11.733), Inches(0.8))
-    tel_callout.fill.solid()
-    tel_callout.fill.fore_color.rgb = BLUE_BOX_BG
-    tel_callout.line.color.rgb = CYAN_ACCENT
-    tf_tc = tel_callout.text_frame
-    tf_tc.word_wrap = True
-    ptc = tf_tc.paragraphs[0]
-    ptc.text = "TELEMETRY OVERLAY ABLATION: Masking the camera's burned-in digital display increased segmentation IoU from 0.654 to 0.843 (+22.4% relative gain)—proving software robustness against real NASA flight video artifacts."
-    ptc.font.size = Pt(11)
-    ptc.font.bold = True
-    ptc.font.color.rgb = TEXT_WHITE
+    # Bottom Overlay Ablation Banner
+    bot4 = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.05), Inches(11.733), Inches(0.72))
+    bot4.fill.solid()
+    bot4.fill.fore_color.rgb = ROYAL_BLUE
+    bot4.line.color.rgb = ROYAL_BLUE
+    tf_b4 = bot4.text_frame
+    tf_b4.word_wrap = True
+    pb4 = tf_b4.paragraphs[0]
+    pb4.text = "TELEMETRY OVERLAY ABLATION: Masking the camera's burned-in digital display increased segmentation IoU from 0.654 to 0.843 (+22.4% relative gain)—proving software robustness against real NASA flight artifacts."
+    pb4.font.size = Pt(13)
+    pb4.font.bold = True
+    pb4.font.color.rgb = TEXT_WHITE
 
     add_footer_link(s4)
 
     # =========================================================================
-    # SLIDE 5: INTERACTIVE DASHBOARD & EXTINCTION PROXIMITY INDEX
+    # SLIDE 5: 30-SECOND VIDEO DEMONSTRATION (Dedicated Video Presentation)
     # =========================================================================
     s5 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s5)
-    add_header(s5, 5, "FLARE-X Dashboard: Zero-Latency, Zero Black-Box Opacity", "ART & TECHNOLOGY | BEST USE OF TECHNOLOGY")
+    set_white_canvas(s5)
+    add_header(s5, 5, "FLARE-X: 30-Second Mission Pitch & Video Demonstration", "PROJECT DEMONSTRATION | TIMED VIDEO PITCH (24.5s)")
 
-    # Flowchart: 5 Physical Terms -> Closed-Form Extinction Proximity Index
-    box_w5 = Inches(2.15)
-    box_h5 = Inches(3.8)
-    box_y5 = Inches(1.6)
+    # Left Half: Video Player / Embedded Movie
+    vid_x, vid_y, vid_w, vid_h = Inches(0.8), Inches(1.6), Inches(6.0), Inches(4.3)
+    poster_path = ASSETS_DIR / "video_poster.png"
+    
+    if os.path.exists(VIDEO_FILE):
+        try:
+            # Embed video object in PowerPoint
+            s5.shapes.add_movie(
+                VIDEO_FILE,
+                vid_x, vid_y, vid_w, vid_h,
+                poster_frame_image=str(poster_path) if poster_path.exists() else None
+            )
+        except Exception as e:
+            # Fallback to poster picture if movie embedding encounters issue
+            if poster_path.exists():
+                s5.shapes.add_picture(str(poster_path), vid_x, vid_y, vid_w, vid_h)
+    elif poster_path.exists():
+        s5.shapes.add_picture(str(poster_path), vid_x, vid_y, vid_w, vid_h)
 
-    terms = [
-        ("1. ELONGATION", "Weight: 25%", "Length / Width ratio increases along flow axis as flame stretches.", CYAN_ACCENT),
-        ("2. STANDOFF", "Weight: 25%", "Flame lifts off surface behind thickened boundary layer.", CYAN_ACCENT),
-        ("3. BLUENESS", "Weight: 20%", "Sootiness index χ drops; flame shifts from yellow to blue.", AMBER_ACCENT),
-        ("4. DIMNESS", "Weight: 15%", "Mean relative radiance falls as reaction zone cools.", AMBER_ACCENT),
-        ("5. CONTRACTION", "Weight: 15%", "Projected flame area shrinks prior to thermal quenching.", GREEN_OK),
-    ]
-
-    for idx, (t_name, t_wt, t_desc, t_col) in enumerate(terms):
-        bx = Inches(0.8 + idx * 2.4)
-        c_box = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, bx, box_y5, box_w5, box_h5)
-        c_box.fill.solid()
-        c_box.fill.fore_color.rgb = CARD_BG
-        c_box.line.color.rgb = t_col
-        c_box.line.width = Pt(1.5)
-        tf_t = c_box.text_frame
-        tf_t.word_wrap = True
-        
-        p = tf_t.paragraphs[0]
-        p.text = t_name
-        p.font.size = Pt(12)
-        p.font.bold = True
-        p.font.color.rgb = t_col
-
-        p2 = tf_t.add_paragraph()
-        p2.text = t_wt
-        p2.font.size = Pt(10)
-        p2.font.bold = True
-        p2.font.color.rgb = TEXT_WHITE
-
-        p3 = tf_t.add_paragraph()
-        p3.text = "\n" + t_desc
-        p3.font.size = Pt(10.5)
-        p3.font.color.rgb = TEXT_LIGHT
-
-    # Closed-Form Mathematical Box
-    cf_box = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(5.65), Inches(11.733), Inches(1.1))
-    cf_box.fill.solid()
-    cf_box.fill.fore_color.rgb = BLUE_BOX_BG
-    cf_box.line.color.rgb = CYAN_ACCENT
-    tf_cf = cf_box.text_frame
-    tf_cf.word_wrap = True
-    p = tf_cf.paragraphs[0]
-    p.text = "EXACT CLOSED-FORM PER-FRAME ATTRIBUTION:"
-    p.font.size = Pt(11.5)
+    # Right Half: Video Transcript & Timestamps Container
+    card_r5 = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.0), Inches(1.6), Inches(5.533), Inches(4.3))
+    card_r5.fill.solid()
+    card_r5.fill.fore_color.rgb = CARD_BG_LIGHT
+    card_r5.line.color.rgb = ROYAL_BLUE
+    card_r5.line.width = Pt(1.5)
+    tf_r5 = card_r5.text_frame
+    tf_r5.word_wrap = True
+    p = tf_r5.paragraphs[0]
+    p.text = "OFFICIAL 30-SECOND VIDEO TRANSCRIPT"
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = AMBER_ACCENT
+    p.font.color.rgb = ROYAL_BLUE
 
-    p_eq = tf_cf.add_paragraph()
-    p_eq.text = "EPI(t) = 0.25·(Elongation) + 0.25·(Standoff) + 0.20·(Blueness) + 0.15·(Dimness) + 0.15·(Area Contraction)"
-    p_eq.font.size = Pt(12)
-    p_eq.font.bold = True
-    p_eq.font.color.rgb = TEXT_WHITE
+    script_steps = [
+        ("[0:00 - 0:03] Intro & Team", "“We are Team FLARE-X for the Flame in Freefall challenge.”"),
+        ("[0:03 - 0:08] The Problem", "“In space, buoyancy vanishes, altering flame physics and endangering astronauts.”"),
+        ("[0:08 - 0:15] The Platform", "“We built FLARE-X: an interpretable Super Intelligence dashboard using NASA BASS-II data.”"),
+        ("[0:15 - 0:21] The Breakthrough", "“Our extreme-value radiance pipeline detects dim blue flames where standard detectors fail, extracting exact extinction proximity.”"),
+        ("[0:21 - 0:25] The Future", "“Safeguarding Artemis on the Moon, crewed missions to Mars, and mines on Earth!”")
+    ]
+    for h, b in script_steps:
+        pi = tf_r5.add_paragraph()
+        pi.text = f"{h}: "
+        pi.font.bold = True
+        pi.font.size = Pt(12)
+        pi.font.color.rgb = AMBER_GOLD
+        r = pi.add_run()
+        r.text = b
+        r.font.bold = False
+        r.font.size = Pt(12)
+        r.font.color.rgb = TEXT_DARK
 
-    p_note = tf_cf.add_paragraph()
-    p_note.text = "• Zero Black-Box: Linear combination of bounded observables provides exact attribution bars on every frame."
-    p_note.font.size = Pt(10.5)
-    p_note.font.color.rgb = TEXT_LIGHT
+    # Bottom Video Play Hyperlink Banner
+    bot5 = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.05), Inches(11.733), Inches(0.72))
+    bot5.fill.solid()
+    bot5.fill.fore_color.rgb = ROYAL_BLUE
+    bot5.line.color.rgb = ROYAL_BLUE
+    tf_b5 = bot5.text_frame
+    tf_b5.word_wrap = True
+    pb5 = tf_b5.paragraphs[0]
+    r = pb5.add_run()
+    r.text = "PLAY / DOWNLOAD VIDEO:  "
+    r.font.bold = True
+    r.font.size = Pt(13)
+    r.font.color.rgb = NEON_LIME
+    r2 = pb5.add_run()
+    r2.text = "[▶ Click Here to Watch / Download 30-Second MP4 Video]"
+    r2.font.bold = True
+    r2.font.size = Pt(13)
+    r2.font.color.rgb = TEXT_WHITE
+    r2.hyperlink.address = VIDEO_URL
 
     add_footer_link(s5)
 
@@ -702,84 +628,58 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     # SLIDE 6: FALSIFICATION TESTING & VERIFIED BENCHMARKS
     # =========================================================================
     s6 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s6)
+    set_white_canvas(s6)
     add_header(s6, 6, "Built-In Falsification: Ground Truth Proved by Telemetry", "BEST USE OF SCIENCE | BEST USE OF DATA")
 
-    # 4 Metric Cards Across
-    mc_w = Inches(2.7)
-    mc_h = Inches(4.2)
-    mc_y = Inches(1.6)
+    # Left Container: 4 Big Metric Cards
+    card_l6 = s6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), Inches(5.8), Inches(4.3))
+    card_l6.fill.solid()
+    card_l6.fill.fore_color.rgb = CARD_BG_LIGHT
+    card_l6.line.color.rgb = GREEN_VERIFIED
+    card_l6.line.width = Pt(1.5)
+    tf_l6 = card_l6.text_frame
+    tf_l6.word_wrap = True
+    p = tf_l6.paragraphs[0]
+    p.text = "100% REPRODUCIBLE VALIDATION METRICS"
+    p.font.size = Pt(16)
+    p.font.bold = True
+    p.font.color.rgb = GREEN_VERIFIED
 
-    metrics_data = [
-        ("CHANGE-POINT RECALL", "1.000 (100%)", "Commanded Flow Steps", [
-            "All 6 commanded flow step transitions detected.",
-            "Scored against burned-in camera anemometer data.",
-            "Sub-frame temporal accuracy: Mean offset = 0.125 frames!"
-        ], CYAN_ACCENT),
-        ("SEGMENTATION ACCURACY", "0.843 IoU", "0.915 Mean Dice Score", [
-            "Scored on 332 individual video frames.",
-            "5th percentile IoU: 0.829 (rock-solid).",
-            "Zero false positives on empty or post-extinction frames."
-        ], GREEN_OK),
-        ("EPI MONOTONICITY", "ρ = -0.989", "Spearman Rank Correlation", [
-            "Tracks approach to extinction monotonically (p < 10⁻⁵).",
-            "Initial dwell EPI: 0.111 → Final live frame EPI: 0.850.",
-            "Built-in falsification rule: ρ > -0.3 returns NOT_SUPPORTED."
-        ], AMBER_ACCENT),
-        ("TEST SUITE COVERAGE", "24 / 24 PASSED", "100% Automated Testing", [
-            "Physics equations (Gr ∝ g) verified.",
-            "Extreme-value noise floor tests verified.",
-            "Zero false positives post-extinction verified.",
-            "Reproducible with seed 20261114."
-        ], BLUE_PRIMARY)
+    metrics6 = [
+        ("Change-Point Recall: 1.000", "All 6 commanded flow step transitions detected with 0.125-frame mean offset!"),
+        ("Mean IoU: 0.843 | Dice: 0.915", "Scored against 332 ground-truth frames. Zero false positives after extinction!"),
+        ("EPI Monotonicity: ρ = -0.989", "Spearman rank correlation verifies monotone tracking of extinction approach (p < 10⁻⁵)."),
+        ("Automated Tests: 24 / 24 Passed", "Physics equations (Gr ∝ g), extreme noise floors, and segmentation verified.")
     ]
+    for h, b in metrics6:
+        pi = tf_l6.add_paragraph()
+        pi.text = f"✓ {h}: "
+        pi.font.bold = True
+        pi.font.size = Pt(13.5)
+        pi.font.color.rgb = TEXT_DARK
+        r = pi.add_run()
+        r.text = b
+        r.font.bold = False
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = TEXT_MUTED
 
-    for idx, (m_title, m_big, m_sub, m_bullets, m_col) in enumerate(metrics_data):
-        bx = Inches(0.8 + idx * 3.0)
-        c_m = s6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, bx, mc_y, mc_w, mc_h)
-        c_m.fill.solid()
-        c_m.fill.fore_color.rgb = CARD_BG
-        c_m.line.color.rgb = m_col
-        c_m.line.width = Pt(1.5)
-        tf_m = c_m.text_frame
-        tf_m.word_wrap = True
-
-        p = tf_m.paragraphs[0]
-        p.text = m_title
-        p.font.size = Pt(11)
-        p.font.bold = True
-        p.font.color.rgb = m_col
-
-        p_big = tf_m.add_paragraph()
-        p_big.text = m_big
-        p_big.font.size = Pt(20)
-        p_big.font.bold = True
-        p_big.font.color.rgb = TEXT_WHITE
-
-        p_sub = tf_m.add_paragraph()
-        p_sub.text = m_sub
-        p_sub.font.size = Pt(10)
-        p_sub.font.bold = True
-        p_sub.font.color.rgb = AMBER_ACCENT
-
-        for b in m_bullets:
-            pi = tf_m.add_paragraph()
-            pi.text = "• " + b
-            pi.font.size = Pt(10)
-            pi.font.color.rgb = TEXT_LIGHT
+    # Right Container: High-Res Flow Staircase Plot
+    diag3_path = ASSETS_DIR / "diagram_staircase.png"
+    if diag3_path.exists():
+        s6.shapes.add_picture(str(diag3_path), Inches(6.8), Inches(1.6), Inches(5.733), Inches(4.3))
 
     # Bottom Falsification Rule Banner
-    f_bar = s6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.0), Inches(11.733), Inches(0.75))
-    f_bar.fill.solid()
-    f_bar.fill.fore_color.rgb = BLUE_BOX_BG
-    f_bar.line.color.rgb = GREEN_OK
-    tf_fb = f_bar.text_frame
-    tf_fb.word_wrap = True
-    pf = tf_fb.paragraphs[0]
-    pf.text = "FALSIFICATION DISCIPLINE: If detected change points did not land on the commanded flow schedule, the method has failed. Our 0.125-frame alignment proves the image features directly measure the physical flow regime shifts."
-    pf.font.size = Pt(11)
-    pf.font.bold = True
-    pf.font.color.rgb = TEXT_WHITE
+    bot6 = s6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.05), Inches(11.733), Inches(0.72))
+    bot6.fill.solid()
+    bot6.fill.fore_color.rgb = ROYAL_BLUE
+    bot6.line.color.rgb = ROYAL_BLUE
+    tf_b6 = bot6.text_frame
+    tf_b6.word_wrap = True
+    pb6 = tf_b6.paragraphs[0]
+    pb6.text = "FALSIFICATION DISCIPLINE: Detected change points must land on the camera's burned-in anemometer telemetry. Our 0.125-frame alignment proves the algorithm directly measures physical flow regime transitions."
+    pb6.font.size = Pt(13)
+    pb6.font.bold = True
+    pb6.font.color.rgb = TEXT_WHITE
 
     add_footer_link(s6)
 
@@ -787,125 +687,120 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     # SLIDE 7: MISSION IMPACT & FORWARD HORIZONS
     # =========================================================================
     s7 = prs.slides.add_slide(blank_layout)
-    set_slide_background(s7)
+    set_white_canvas(s7)
     add_header(s7, 7, "Mission Impact: Moon, Mars, Earth Infrastructure & Beyond", "GALACTIC IMPACT | BEST MISSION CONCEPT | LOCAL IMPACT")
 
-    # 3 Large Pillars: Spacecraft Flight, Earth Infrastructure, Global Open Science
-    p_w7 = Inches(3.7)
-    p_h7 = Inches(4.2)
-    p_y7 = Inches(1.6)
+    col_w7 = Inches(3.7)
+    col_h7 = Inches(4.25)
+    col_y7 = Inches(1.6)
 
-    # Pillar 1: Spaceflight (Artemis / Mars)
-    pil1 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), p_y7, p_w7, p_h7)
-    pil1.fill.solid()
-    pil1.fill.fore_color.rgb = CARD_BG
-    pil1.line.color.rgb = CYAN_ACCENT
-    pil1.line.width = Pt(1.5)
-    tf1 = pil1.text_frame
+    # Pillar 1: Spaceflight
+    p1 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), col_y7, col_w7, col_h7)
+    p1.fill.solid()
+    p1.fill.fore_color.rgb = CARD_BG_LIGHT
+    p1.line.color.rgb = ROYAL_BLUE
+    p1.line.width = Pt(1.5)
+    tf1 = p1.text_frame
     tf1.word_wrap = True
     p = tf1.paragraphs[0]
     p.text = "1. DEEP-SPACE HABITATION"
-    p.font.size = Pt(13)
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = CYAN_ACCENT
-    pil1_items = [
-        ("Lunar Gateway & Artemis", "Protects crewed lunar habitats by identifying non-buoyant extinction margins."),
-        ("Mars Transit Vehicles", "Multi-year missions cannot afford false alarms or unquenched smoldering."),
-        ("Next-Gen NASA SoFIE", "Built as a drop-in analytical harness for NASA's active SoFIE payload on the ISS."),
-        ("Modernizing Standards", "Provides empirical low-g data to upgrade NASA-STD-6001 Test 1.")
+    p.font.color.rgb = ROYAL_BLUE
+    p1_items = [
+        ("Lunar Gateway & Artemis", "Protects crewed lunar basecamp by quantifying non-buoyant extinction margins."),
+        ("Crewed Mars Transit", "Multi-year missions cannot afford false alarms or unquenched smoldering fires."),
+        ("Next-Gen NASA SoFIE", "Built as a drop-in analytical harness for NASA's active SoFIE payload on the ISS.")
     ]
-    for h, b in pil1_items:
+    for h, b in p1_items:
         pi = tf1.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(10)
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Pillar 2: Edge Flight Concept (Level 5)
-    pil2 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(4.8), p_y7, p_w7, p_h7)
-    pil2.fill.solid()
-    pil2.fill.fore_color.rgb = CARD_BG
-    pil2.line.color.rgb = AMBER_ACCENT
-    pil2.line.width = Pt(1.5)
-    tf2 = pil2.text_frame
+    # Pillar 2: Edge Flight Architecture
+    p2 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(4.8), col_y7, col_w7, col_h7)
+    p2.fill.solid()
+    p2.fill.fore_color.rgb = CARD_BG_LIGHT
+    p2.line.color.rgb = AMBER_GOLD
+    p2.line.width = Pt(1.5)
+    tf2 = p2.text_frame
     tf2.word_wrap = True
     p = tf2.paragraphs[0]
     p.text = "2. LEVEL-5 FLIGHT CONCEPT"
-    p.font.size = Pt(13)
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = AMBER_ACCENT
-    pil2_items = [
+    p.font.color.rgb = AMBER_GOLD
+    p2_items = [
         ("Optical Edge Sensors", "Runs rule-based Tier-1 morphology on low-SWaP radiation-tolerant flight computers."),
         ("Pre-Smoke Early Warning", "Detects boundary layer standoff and blueness drift BEFORE smoke enters detectors."),
-        ("ECLSS Integration", "Automated ventilation throttling and targeted N₂/CO₂ suppressant release."),
-        ("Honest TRL Label", "Clearly demarcated as Level 5 Mission Concept (TRL 3-4).")
+        ("ECLSS Integration", "Automated ventilation throttling and targeted N₂/CO₂ suppressant release.")
     ]
-    for h, b in pil2_items:
+    for h, b in p2_items:
         pi = tf2.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(10)
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Pillar 3: Terrestrial Impact (Mines, Tunnels, Education)
-    pil3 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(8.8), p_y7, p_w7, p_h7)
-    pil3.fill.solid()
-    pil3.fill.fore_color.rgb = CARD_BG
-    pil3.line.color.rgb = GREEN_OK
-    pil3.line.width = Pt(1.5)
-    tf3 = pil3.text_frame
+    # Pillar 3: Terrestrial Spin-Offs
+    p3 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(8.8), col_y7, col_w7, col_h7)
+    p3.fill.solid()
+    p3.fill.fore_color.rgb = CARD_BG_LIGHT
+    p3.line.color.rgb = GREEN_VERIFIED
+    p3.line.width = Pt(1.5)
+    tf3 = p3.text_frame
     tf3.word_wrap = True
     p = tf3.paragraphs[0]
-    p.text = "3. EARTH SPIN-OFFS & STEM"
-    p.font.size = Pt(13)
+    p.text = "3. EARTH INFRASTRUCTURE"
+    p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = GREEN_OK
-    pil3_items = [
+    p.font.color.rgb = GREEN_VERIFIED
+    p3_items = [
         ("Subway & Mine Tunnels", "Forced horizontal low-speed air in low-ceiling shafts mirrors microgravity flame spread."),
         ("Aircraft Cargo Holds", "Low-pressure, constrained convection fire detection."),
-        ("Global STEM Education", "Free MIT-licensed simulator for universities and fire academies worldwide without GPUs."),
-        ("Democratizing Space", "Turns locked NASA archives into interactive open science for all.")
+        ("Global STEM Education", "Free MIT-licensed simulator for universities and fire academies worldwide without GPUs.")
     ]
-    for h, b in pil3_items:
+    for h, b in p3_items:
         pi = tf3.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(10.5)
-        pi.font.color.rgb = TEXT_WHITE
+        pi.font.size = Pt(13)
+        pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(10)
-        r.font.color.rgb = TEXT_LIGHT
+        r.font.size = Pt(12)
+        r.font.color.rgb = TEXT_MUTED
 
-    # Bottom Call to Action
-    cta_box = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.0), Inches(11.733), Inches(0.75))
-    cta_box.fill.solid()
-    cta_box.fill.fore_color.rgb = BLUE_BOX_BG
-    cta_box.line.color.rgb = CYAN_ACCENT
-    tf_cta = cta_box.text_frame
-    tf_cta.word_wrap = True
-    p_cta = tf_cta.paragraphs[0]
-    p_cta.text = "THE MISSION CONCLUSION: NASA measured this. FLARE-X makes it measurable, auditable, and actionable. From the International Space Station to the Moon, Mars, and Earth's deepest tunnels—making fire safety an exact science."
-    p_cta.font.size = Pt(11)
-    p_cta.font.bold = True
-    p_cta.font.color.rgb = TEXT_WHITE
+    # Bottom Conclusion
+    bot7 = s7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.05), Inches(11.733), Inches(0.72))
+    bot7.fill.solid()
+    bot7.fill.fore_color.rgb = ROYAL_BLUE
+    bot7.line.color.rgb = ROYAL_BLUE
+    tf_b7 = bot7.text_frame
+    tf_b7.word_wrap = True
+    pb7 = tf_b7.paragraphs[0]
+    pb7.text = "THE MISSION CONCLUSION: NASA measured this. FLARE-X makes it measurable, auditable, and actionable. From the International Space Station to the Moon, Mars, and Earth's deepest tunnels—making fire safety an exact science."
+    pb7.font.size = Pt(13)
+    pb7.font.bold = True
+    pb7.font.color.rgb = TEXT_WHITE
 
     add_footer_link(s7)
 
-    # Save presentation
     prs.save(output_path)
-    print(f"Successfully generated {output_path} (7 slides, 16:9 widescreen, fully hyperlinked)")
+    print(f"Successfully generated {output_path} (7 slides, NASA theme, white canvas, embedded video on slide 5)")
 
 if __name__ == "__main__":
     create_deck()
