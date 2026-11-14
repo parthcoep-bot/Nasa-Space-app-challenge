@@ -3,9 +3,9 @@
 Generate the updated NASA Space Apps 7-slide presentation deck:
 - Matching the official NASA Space Apps website theme (Electric Royal Blue, Neon Lime, Pure White)
 - Clean White Canvas (>50% white space for crisp modern presentation aesthetics)
-- Increased text sizes by 3-4 sizes across all slides (Titles 28-30pt, Headers 16-18pt, Body 13-15pt)
-- Embedded diagrammatic illustrations (Earth vs Space flame, Segmentation comparison, Flow staircase)
-- Slide 5 dedicated to the 30-Second Video Presentation with embedded movie, poster, and timestamps
+- Increased text sizes by an additional 2-3 points across all slides (Titles 32-34pt, Headers 18-20pt, Body 15-17pt)
+- Embedded high-res visual diagrams (Flame comparison, Segmentation comparison, Flow staircase)
+- Slide 5 dedicated to the 30-Second Motion-Graphics Video Presentation (playable directly in PowerPoint)
 - Clickable hyperlinks on every slide connecting to live dashboard, GitHub repo, and NASA portals
 - Strict 7-slide limit compliant with NASA Space Apps Challenge Global Judging rules
 """
@@ -49,7 +49,7 @@ PAPER_URL      = "https://doi.org/10.1038/s41598-017-18398-4"
 VIDEO_FILE     = "flarex_30s_presentation.mp4"
 ASSETS_DIR     = Path("slide_assets")
 
-def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
+def create_deck(primary_out="FLARE-X_NASA_Space_Apps_Presentation.pptx", alt_out="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     prs = Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
@@ -70,34 +70,34 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         stripe.line.color.rgb = NEON_LIME
 
         # Badge
-        badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.35), Inches(5.2), Inches(0.42))
+        badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.32), Inches(5.8), Inches(0.46))
         badge.fill.solid()
         badge.fill.fore_color.rgb = ROYAL_BLUE
         badge.line.color.rgb = ROYAL_BLUE
         tf_b = badge.text_frame
         tf_b.word_wrap = True
-        tf_b.margin_left = Inches(0.12)
+        tf_b.margin_left = Inches(0.14)
         tf_b.margin_top = Inches(0.04)
         p_b = tf_b.paragraphs[0]
         p_b.text = subtitle_badge.upper()
         p_b.font.name = FONT_NAME
-        p_b.font.size = Pt(12)
+        p_b.font.size = Pt(14)
         p_b.font.bold = True
         p_b.font.color.rgb = NEON_LIME
 
         # Slide Number
-        num_box = slide.shapes.add_textbox(Inches(11.0), Inches(0.35), Inches(1.6), Inches(0.4))
+        num_box = slide.shapes.add_textbox(Inches(10.8), Inches(0.32), Inches(1.8), Inches(0.45))
         tf_n = num_box.text_frame
         p_n = tf_n.paragraphs[0]
         p_n.text = f"SLIDE {slide_num} OF 7"
         p_n.font.name = FONT_NAME
-        p_n.font.size = Pt(13)
+        p_n.font.size = Pt(15)
         p_n.font.bold = True
         p_n.font.color.rgb = ROYAL_BLUE
         p_n.alignment = PP_ALIGN.RIGHT
 
-        # Main Title (Increased Size: 28pt)
-        title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.82), Inches(11.8), Inches(0.65))
+        # Main Title (Increased Size: 32pt)
+        title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.80), Inches(11.8), Inches(0.72))
         tf_t = title_box.text_frame
         tf_t.word_wrap = True
         tf_t.margin_top = Inches(0)
@@ -105,12 +105,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         p_t = tf_t.paragraphs[0]
         p_t.text = title
         p_t.font.name = FONT_NAME
-        p_t.font.size = Pt(28)
+        p_t.font.size = Pt(32)
         p_t.font.bold = True
         p_t.font.color.rgb = TEXT_DARK
 
     def add_footer_link(slide):
-        footer = slide.shapes.add_textbox(Inches(0.8), Inches(6.88), Inches(11.8), Inches(0.48))
+        footer = slide.shapes.add_textbox(Inches(0.8), Inches(6.85), Inches(11.8), Inches(0.50))
         tf = footer.text_frame
         tf.word_wrap = True
         p = tf.paragraphs[0]
@@ -118,14 +118,14 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         r1 = p.add_run()
         r1.text = "⚡ EXPLORE LIVE: "
         r1.font.name = FONT_NAME
-        r1.font.size = Pt(12)
+        r1.font.size = Pt(14)
         r1.font.bold = True
         r1.font.color.rgb = AMBER_GOLD
 
         r2 = p.add_run()
         r2.text = "[Interactive WebApp Dashboard]"
         r2.font.name = FONT_NAME
-        r2.font.size = Pt(12)
+        r2.font.size = Pt(14)
         r2.font.bold = True
         r2.font.color.rgb = ROYAL_BLUE
         r2.hyperlink.address = LIVE_DEMO_URL
@@ -133,13 +133,13 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         r3 = p.add_run()
         r3.text = "   •   "
         r3.font.name = FONT_NAME
-        r3.font.size = Pt(12)
+        r3.font.size = Pt(14)
         r3.font.color.rgb = TEXT_MUTED
 
         r4 = p.add_run()
-        r4.text = "[GitHub Codebase & 24/24 Verified Tests]"
+        r4.text = "[GitHub Open Codebase & 24/24 Verified Tests]"
         r4.font.name = FONT_NAME
-        r4.font.size = Pt(12)
+        r4.font.size = Pt(14)
         r4.font.bold = True
         r4.font.color.rgb = ROYAL_BLUE
         r4.hyperlink.address = GITHUB_URL
@@ -157,36 +157,36 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     st1.line.color.rgb = NEON_LIME
 
     # Header Badge
-    badge1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.45), Inches(6.4), Inches(0.45))
+    badge1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.40), Inches(6.8), Inches(0.48))
     badge1.fill.solid()
     badge1.fill.fore_color.rgb = ROYAL_BLUE
     badge1.line.color.rgb = ROYAL_BLUE
     tf_b1 = badge1.text_frame
     p_b1 = tf_b1.paragraphs[0]
     p_b1.text = "NASA SPACE APPS CHALLENGE 2026 | FLAME IN FREEFALL"
-    p_b1.font.size = Pt(12)
+    p_b1.font.size = Pt(14)
     p_b1.font.bold = True
     p_b1.font.color.rgb = NEON_LIME
 
-    # Main Project Title (30pt Bold)
-    t_box1 = s1.shapes.add_textbox(Inches(0.8), Inches(1.0), Inches(11.8), Inches(1.4))
+    # Main Project Title (34pt Bold)
+    t_box1 = s1.shapes.add_textbox(Inches(0.8), Inches(0.95), Inches(11.8), Inches(1.4))
     tf1 = t_box1.text_frame
     p1_1 = tf1.paragraphs[0]
     p1_1.text = "FLARE-X: Flame Learning, Analysis, Risk & Extinction Explorer"
     p1_1.font.name = FONT_NAME
-    p1_1.font.size = Pt(30)
+    p1_1.font.size = Pt(34)
     p1_1.font.bold = True
     p1_1.font.color.rgb = TEXT_DARK
 
     p1_2 = tf1.add_paragraph()
     p1_2.text = "Interpretable Super Intelligence (SI) Platform for Microgravity Combustion & Spacecraft Safety"
     p1_2.font.name = FONT_NAME
-    p1_2.font.size = Pt(16)
+    p1_2.font.size = Pt(18)
     p1_2.font.bold = True
     p1_2.font.color.rgb = ROYAL_BLUE
 
-    # The Human Stakes Card (Clean White with Royal Blue border)
-    quote_card = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(2.45), Inches(11.733), Inches(1.3))
+    # The Human Stakes Card
+    quote_card = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(2.45), Inches(11.733), Inches(1.35))
     quote_card.fill.solid()
     quote_card.fill.fore_color.rgb = CARD_BG_LIGHT
     quote_card.line.color.rgb = ROYAL_BLUE
@@ -196,18 +196,18 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     p_q1 = tf_q.paragraphs[0]
     p_q1.text = "THE ASTRONAUT'S REALITY IN DEEP SPACE:"
     p_q1.font.name = FONT_NAME
-    p_q1.font.size = Pt(14)
+    p_q1.font.size = Pt(16)
     p_q1.font.bold = True
     p_q1.font.color.rgb = AMBER_GOLD
     p_q2 = tf_q.add_paragraph()
     p_q2.text = "“On Earth, fire rises. In space, it doesn't. Inside a sealed spacecraft heading to Mars, there is no window to open, no outside to evacuate to, and a finite supply of suppressant. Everything humans know about fire was learned under Earth's gravity.”"
     p_q2.font.name = FONT_NAME
-    p_q2.font.size = Pt(13.5)
+    p_q2.font.size = Pt(15.5)
     p_q2.font.color.rgb = TEXT_DARK
 
     # Flowchart: 3-Stage Architecture (Increased font sizes)
-    flow_y = Inches(3.95)
-    flow_w = Inches(3.5)
+    flow_y = Inches(3.98)
+    flow_w = Inches(3.55)
     flow_h = Inches(2.7)
 
     # Box 1
@@ -220,7 +220,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     p = tf_box1.paragraphs[0]
     p.text = "1. UNTAPPED ARCHIVE"
     p.font.name = FONT_NAME
-    p.font.size = Pt(16)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = ROYAL_BLUE
     items1 = [
@@ -231,11 +231,11 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     for it in items1:
         pi = tf_box1.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
 
     # Arrow 1->2
-    arr1 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(4.4), flow_y + Inches(1.05), Inches(0.5), Inches(0.45))
+    arr1 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(4.45), flow_y + Inches(1.05), Inches(0.45), Inches(0.45))
     arr1.fill.solid()
     arr1.fill.fore_color.rgb = ROYAL_BLUE
     arr1.line.color.rgb = ROYAL_BLUE
@@ -251,7 +251,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     p = tf_box2.paragraphs[0]
     p.text = "2. FLARE-X ENGINE"
     p.font.name = FONT_NAME
-    p.font.size = Pt(16)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = AMBER_GOLD
     items2 = [
@@ -263,11 +263,11 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     for it in items2:
         pi = tf_box2.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
 
     # Arrow 2->3
-    arr2 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(8.6), flow_y + Inches(1.05), Inches(0.5), Inches(0.45))
+    arr2 = s1.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(8.65), flow_y + Inches(1.05), Inches(0.45), Inches(0.45))
     arr2.fill.solid()
     arr2.fill.fore_color.rgb = ROYAL_BLUE
     arr2.line.color.rgb = ROYAL_BLUE
@@ -283,7 +283,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     p = tf_box3.paragraphs[0]
     p.text = "3. MISSION IMPACT"
     p.font.name = FONT_NAME
-    p.font.size = Pt(16)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = GREEN_VERIFIED
     items3 = [
@@ -295,7 +295,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     for it in items3:
         pi = tf_box3.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
 
     add_footer_link(s1)
@@ -317,26 +317,26 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_l2.word_wrap = True
     p = tf_l2.paragraphs[0]
     p.text = "THE ZERO-GRAVITY COMBUSTION PARADOX"
-    p.font.size = Pt(16)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = ROYAL_BLUE
 
     points2 = [
-        ("Grashof Scaling Collapse", "Gr = (g·β·ΔT·L³)/ν² falls by 10⁶× in space! Buoyant velocity drops from 30 cm/s to ZERO."),
-        ("The Low-Flow Hazard", "Under forced ventilation (0.4–8 cm/s), materials ignite and burn below Earth oxygen limits!"),
+        ("Grashof Scaling Collapse", "Gr = (g·β·ΔT·L³)/ν² falls by 1,000,000×! Buoyant updraft drops from 30 cm/s to ZERO."),
+        ("The Low-Flow Hazard", "Under forced cabin ventilation (0.4–8 cm/s), materials burn below Earth oxygen limits!"),
         ("Boundary Layer Thickening", "Flame lifts off surface, heat feedback drops, surface re-radiation quenches reaction."),
-        ("Standard Flammability Flaw", "NASA-STD-6001 Test 1 tests upward in 1 g, misjudging microgravity low-flow flammability.")
+        ("Standard Flammability Flaw", "NASA-STD-6001 Test 1 tests upward in 1 g, misjudging low-flow microgravity danger.")
     ]
     for h, b in points2:
         pi = tf_l2.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13.5)
+        pi.font.size = Pt(15.5)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(13)
+        r.font.size = Pt(15)
         r.font.color.rgb = TEXT_MUTED
 
     # Right Container: High-Res Flame Diagram
@@ -353,7 +353,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_b2.word_wrap = True
     pb2 = tf_b2.paragraphs[0]
     pb2.text = "FALSIFIABLE HYPOTHESIS: Link et al. (Nature 2018) published that flames become 'longer, dimmer, and bluer' near extinction. FLARE-X transforms this into an auditable frame-by-frame measurement!"
-    pb2.font.size = Pt(13)
+    pb2.font.size = Pt(15)
     pb2.font.bold = True
     pb2.font.color.rgb = TEXT_WHITE
 
@@ -379,7 +379,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf1.word_wrap = True
     p = tf1.paragraphs[0]
     p.text = "1. NASA PSI AUDIT"
-    p.font.size = Pt(17)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = ROYAL_BLUE
     c1_items = [
@@ -390,7 +390,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     for it in c1_items:
         pi = tf1.add_paragraph()
         pi.text = "• " + it
-        pi.font.size = Pt(13.5)
+        pi.font.size = Pt(15.5)
         pi.font.color.rgb = TEXT_DARK
 
     # Column 2: Rejections
@@ -403,7 +403,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf2.word_wrap = True
     p = tf2.paragraphs[0]
     p.text = "2. REJECTED (WHY?)"
-    p.font.size = Pt(17)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = RED_ALERT
     c2_items = [
@@ -415,12 +415,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf2.add_paragraph()
         pi.text = f"✕ {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12.5)
+        r.font.size = Pt(14.5)
         r.font.color.rgb = TEXT_MUTED
 
     # Column 3: Selected BASS-II
@@ -433,7 +433,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf3.word_wrap = True
     p = tf3.paragraphs[0]
     p.text = "3. SELECTED: BASS-II"
-    p.font.size = Pt(17)
+    p.font.size = Pt(19)
     p.font.bold = True
     p.font.color.rgb = GREEN_VERIFIED
     c3_items = [
@@ -445,12 +445,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf3.add_paragraph()
         pi.text = f"✓ {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12.5)
+        r.font.size = Pt(14.5)
         r.font.color.rgb = TEXT_MUTED
 
     # Bottom Links
@@ -464,12 +464,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     r = p_b3.add_run()
     r.text = "DATA TRANSPARENCY:  "
     r.font.bold = True
-    r.font.size = Pt(13)
+    r.font.size = Pt(15)
     r.font.color.rgb = NEON_LIME
     r2 = p_b3.add_run()
     r2.text = "[NASA Physical Sciences Informatics (PSI) Portal]"
     r2.font.bold = True
-    r2.font.size = Pt(13)
+    r2.font.size = Pt(15)
     r2.font.color.rgb = TEXT_WHITE
     r2.hyperlink.address = NASA_PSI_URL
     r3 = p_b3.add_run()
@@ -478,7 +478,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     r4 = p_b3.add_run()
     r4.text = "[Nature Scientific Reports Link et al. Paper]"
     r4.font.bold = True
-    r4.font.size = Pt(13)
+    r4.font.size = Pt(15)
     r4.font.color.rgb = TEXT_WHITE
     r4.hyperlink.address = PAPER_URL
 
@@ -501,7 +501,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_l4.word_wrap = True
     p = tf_l4.paragraphs[0]
     p.text = "THE FATAL FLAW OF COMMERCIAL FIRE DETECTORS"
-    p.font.size = Pt(15.5)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = RED_ALERT
 
@@ -515,12 +515,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf_l4.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12.5)
+        r.font.size = Pt(14.5)
         r.font.color.rgb = TEXT_MUTED
 
     # Right Container: High-Res Segmentation Comparison Diagram
@@ -537,7 +537,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_b4.word_wrap = True
     pb4 = tf_b4.paragraphs[0]
     pb4.text = "TELEMETRY OVERLAY ABLATION: Masking the camera's burned-in digital display increased segmentation IoU from 0.654 to 0.843 (+22.4% relative gain)—proving software robustness against real NASA flight artifacts."
-    pb4.font.size = Pt(13)
+    pb4.font.size = Pt(15)
     pb4.font.bold = True
     pb4.font.color.rgb = TEXT_WHITE
 
@@ -550,7 +550,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     set_white_canvas(s5)
     add_header(s5, 5, "FLARE-X: 30-Second Mission Pitch & Video Demonstration", "PROJECT DEMONSTRATION | TIMED VIDEO PITCH (24.5s)")
 
-    # Left Half: Video Player / Embedded Movie
+    # Left Half: Video Player / Embedded Movie (Native PowerPoint viewable)
     vid_x, vid_y, vid_w, vid_h = Inches(0.8), Inches(1.6), Inches(6.0), Inches(4.3)
     poster_path = ASSETS_DIR / "video_poster.png"
     
@@ -563,13 +563,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
                 poster_frame_image=str(poster_path) if poster_path.exists() else None
             )
         except Exception as e:
-            # Fallback to poster picture if movie embedding encounters issue
             if poster_path.exists():
                 s5.shapes.add_picture(str(poster_path), vid_x, vid_y, vid_w, vid_h)
     elif poster_path.exists():
         s5.shapes.add_picture(str(poster_path), vid_x, vid_y, vid_w, vid_h)
 
-    # Right Half: Video Transcript & Timestamps Container
+    # Right Half: Video Transcript & Timestamps Container (Increased font sizes)
     card_r5 = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.0), Inches(1.6), Inches(5.533), Inches(4.3))
     card_r5.fill.solid()
     card_r5.fill.fore_color.rgb = CARD_BG_LIGHT
@@ -579,7 +578,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_r5.word_wrap = True
     p = tf_r5.paragraphs[0]
     p.text = "OFFICIAL 30-SECOND VIDEO TRANSCRIPT"
-    p.font.size = Pt(16)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = ROYAL_BLUE
 
@@ -594,12 +593,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf_r5.add_paragraph()
         pi.text = f"{h}: "
         pi.font.bold = True
-        pi.font.size = Pt(12)
+        pi.font.size = Pt(14)
         pi.font.color.rgb = AMBER_GOLD
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12)
+        r.font.size = Pt(14)
         r.font.color.rgb = TEXT_DARK
 
     # Bottom Video Play Hyperlink Banner
@@ -613,12 +612,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     r = pb5.add_run()
     r.text = "PLAY / DOWNLOAD VIDEO:  "
     r.font.bold = True
-    r.font.size = Pt(13)
+    r.font.size = Pt(15)
     r.font.color.rgb = NEON_LIME
     r2 = pb5.add_run()
     r2.text = "[▶ Click Here to Watch / Download 30-Second MP4 Video]"
     r2.font.bold = True
-    r2.font.size = Pt(13)
+    r2.font.size = Pt(15)
     r2.font.color.rgb = TEXT_WHITE
     r2.hyperlink.address = VIDEO_URL
 
@@ -641,7 +640,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_l6.word_wrap = True
     p = tf_l6.paragraphs[0]
     p.text = "100% REPRODUCIBLE VALIDATION METRICS"
-    p.font.size = Pt(16)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = GREEN_VERIFIED
 
@@ -655,12 +654,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf_l6.add_paragraph()
         pi.text = f"✓ {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13.5)
+        pi.font.size = Pt(15.5)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12.5)
+        r.font.size = Pt(14.5)
         r.font.color.rgb = TEXT_MUTED
 
     # Right Container: High-Res Flow Staircase Plot
@@ -677,7 +676,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_b6.word_wrap = True
     pb6 = tf_b6.paragraphs[0]
     pb6.text = "FALSIFICATION DISCIPLINE: Detected change points must land on the camera's burned-in anemometer telemetry. Our 0.125-frame alignment proves the algorithm directly measures physical flow regime transitions."
-    pb6.font.size = Pt(13)
+    pb6.font.size = Pt(15)
     pb6.font.bold = True
     pb6.font.color.rgb = TEXT_WHITE
 
@@ -704,7 +703,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf1.word_wrap = True
     p = tf1.paragraphs[0]
     p.text = "1. DEEP-SPACE HABITATION"
-    p.font.size = Pt(16)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = ROYAL_BLUE
     p1_items = [
@@ -716,12 +715,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf1.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12)
+        r.font.size = Pt(14)
         r.font.color.rgb = TEXT_MUTED
 
     # Pillar 2: Edge Flight Architecture
@@ -734,7 +733,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf2.word_wrap = True
     p = tf2.paragraphs[0]
     p.text = "2. LEVEL-5 FLIGHT CONCEPT"
-    p.font.size = Pt(16)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = AMBER_GOLD
     p2_items = [
@@ -746,12 +745,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf2.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12)
+        r.font.size = Pt(14)
         r.font.color.rgb = TEXT_MUTED
 
     # Pillar 3: Terrestrial Spin-Offs
@@ -764,7 +763,7 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf3.word_wrap = True
     p = tf3.paragraphs[0]
     p.text = "3. EARTH INFRASTRUCTURE"
-    p.font.size = Pt(16)
+    p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = GREEN_VERIFIED
     p3_items = [
@@ -776,12 +775,12 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
         pi = tf3.add_paragraph()
         pi.text = f"• {h}: "
         pi.font.bold = True
-        pi.font.size = Pt(13)
+        pi.font.size = Pt(15)
         pi.font.color.rgb = TEXT_DARK
         r = pi.add_run()
         r.text = b
         r.font.bold = False
-        r.font.size = Pt(12)
+        r.font.size = Pt(14)
         r.font.color.rgb = TEXT_MUTED
 
     # Bottom Conclusion
@@ -793,14 +792,21 @@ def create_deck(output_path="FLARE-X_NASA_Space_Apps_7Slides.pptx"):
     tf_b7.word_wrap = True
     pb7 = tf_b7.paragraphs[0]
     pb7.text = "THE MISSION CONCLUSION: NASA measured this. FLARE-X makes it measurable, auditable, and actionable. From the International Space Station to the Moon, Mars, and Earth's deepest tunnels—making fire safety an exact science."
-    pb7.font.size = Pt(13)
+    pb7.font.size = Pt(15)
     pb7.font.bold = True
     pb7.font.color.rgb = TEXT_WHITE
 
     add_footer_link(s7)
 
-    prs.save(output_path)
-    print(f"Successfully generated {output_path} (7 slides, NASA theme, white canvas, embedded video on slide 5)")
+    # Save to primary and attempt alt if not locked
+    prs.save(primary_out)
+    print(f"Successfully saved {primary_out}")
+
+    try:
+        prs.save(alt_out)
+        print(f"Successfully saved {alt_out}")
+    except PermissionError:
+        print(f"Note: {alt_out} is currently open in PowerPoint. Please close PowerPoint to overwrite it, or open {primary_out} directly!")
 
 if __name__ == "__main__":
     create_deck()

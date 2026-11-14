@@ -166,3 +166,4 @@ if __name__ == "__main__":
     make_segmentation_compare()
     make_staircase_plot()
     make_epi_bars()
+
