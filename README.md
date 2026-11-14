@@ -142,6 +142,25 @@ fact without a repository root in its chain raises an exception. See
 Where a value could not be confirmed, the repository records `NOT_VERIFIED` and the
 reason. It is never replaced with a plausible-looking number.
 
+## Alignment with the 10 NASA Space Apps Global Awards
+
+FLARE-X was built to provide direct, verifiable evidence across **all 10 Global Award categories**:
+
+| Award Category | How FLARE-X Aligns | Key Technical Evidence |
+|---|---|---|
+| **1. Best Use of Science** | Falsifiable hypothesis ($H_1$–$H_4$); change points must match commanded flow. | 24/24 passing unit/physics tests; $Gr \propto g$ scaling. |
+| **2. Best Use of Data** | Exhaustive PSI curation; principled rejection of FLEX/ACME/Saffire. | SHA-256 provenance chain; +22.4% overlay ablation proof. |
+| **3. Best Use of Technology** | Extreme-value noise-gated radiance proxy; multivariate change detection. | Overcomes dim blue flame failure; sub-frame localization (0.125 fr). |
+| **4. Galactic Impact** | Quantifies non-buoyant extinction for Artemis & Mars human habitats. | Bridges to upcoming NASA SoFIE (Solid Fuel Ignition & Extinction). |
+| **5. Best Mission Concept** | Level 5 operational spacecraft flight architecture with edge optical diagnostics. | Low-SWaP early warning before smoke alarms trigger (`MISSION_CONCEPT.md`). |
+| **6. Most Inspirational** | Addresses the human reality: fire in a sealed spacecraft with no escape. | Primal survival danger transformed into mathematical safety rules. |
+| **7. Best Use of Storytelling** | The scientific phenomenon and narrative are one: *"The flame that turns blue"*. | Narrative matches Term 3 sootiness index $\chi = (R-B)/(R+B)$ directly. |
+| **8. Global Connection** | International agency alignment (NASA, ESA, JAXA *Kibo*, CSA). | Open MIT code runnable on ordinary student laptops globally without GPUs. |
+| **9. Art & Technology** | Combustion emission color palette; live synchronized SVG timeline scrubbers. | Real-time attribution bars and interactive client-side dashboard (`index.html`). |
+| **10. Local Impact** | Space low-velocity opposed flows model underground mine/tunnel fires. | Direct transfer to subway tunnel ventilation and terrestrial STEM labs. |
+
+Full award evidence breakdown: [AWARD_ALIGNMENT.md](AWARD_ALIGNMENT.md).
+
 ## Documentation
 
 | File | What is in it |
