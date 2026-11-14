@@ -1,0 +1,173 @@
+{
+  "_README": "FLARE-X dataset registry. Every field carries a verification status. 'verified_2026_09' means the statement was read directly from the cited NASA page or peer-reviewed paper during the review documented in DATA_SOURCES.md. 'NOT_VERIFIED' means we looked and could not confirm it from an authoritative source; it is never replaced by a plausible value. Absence of a DOI field means no dataset DOI was located, not that none exists.",
+  "_registry_version": "0.3.0",
+  "_review_date": "2026-09-19",
+  "_repository": {
+    "name": "NASA Physical Sciences Informatics (PSI)",
+    "landing_page": "https://www.nasa.gov/physical-sciences-informatics-psi/",
+    "investigations_index": "https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/",
+    "data_access": "https://psiuserregistration.ndc.nasa.gov/",
+    "access_model": "Free public access after individual user registration. verified_2026_09: the PSI Data Repository link on the NASA PSI pages resolves to a user-registration portal.",
+    "redistribution_by_flarex": "NOT PERMITTED BY THIS PROJECT AS A MATTER OF POLICY. FLARE-X bundles no PSI files. Users obtain data under their own PSI registration. See DATA_SOURCES.md.",
+    "note": "verified_2026_09: PSI launched in 2014 as NASA's open repository for microgravity physical-sciences data across six disciplines, one of which is Combustion Science."
+  },
+
+  "investigations": [
+    {
+      "id": "BASS-II",
+      "name": "Burning and Suppression of Solids - II",
+      "psi_listed": true,
+      "psi_completion_status": "Complete (verified_2026_09, PSI investigations index)",
+      "roses_eligible": true,
+      "platform": "ISS, Microgravity Science Glovebox (MSG)",
+      "gravity_condition": "microgravity (ISS free fall)",
+      "objective": "verified_2026_09: understand the mechanisms controlling flame spread over solid combustible materials in microgravity, including flammability limits as a function of oxygen concentration and flow speed, in both opposed and concurrent flow.",
+      "hardware": {
+        "description": "verified_2026_09: modified SPICE hardware; a black anodized 76 mm x 76 mm rectangular flow duct with a 17 cm test section, fan-driven flow, honeycomb straightener, inlet screen, and an omnidirectional spherical hot-wire anemometer.",
+        "max_flow_cm_s": 53,
+        "flow_generation": "fan at the upstream end, voltage-controlled, with optional inlet flow restrictors for low velocities",
+        "oxygen_control": "gaseous nitrogen vitiation of the MSG working volume; a perfectly stirred reactor model set the N2 flow time and rate, calibrated against CSA-CP oxygen readings offset by Major Constituents Analyzer ISS ambient data"
+      },
+      "imaging": {
+        "video_camera": "Panasonic WV-CP654 colour video camera, 760 x 480 px, viewing through the front window via a turning mirror",
+        "video_overlay": "CRITICAL FOR CV: the video camera carried a built-in digital overlay displaying nitrogen flow rate, fan voltage, hot-wire anemometer reading and radiometer signal, burned into the frame.",
+        "still_camera": "Nikon D300, 12.3 MP, 60 mm lens, 4320 x 2968 px",
+        "still_resolution_px_per_mm": 34,
+        "video_scale_px_per_mm": "NOT_VERIFIED - the video camera scale is not stated in the sources reviewed and must be recovered from the in-duct moveable scale visible in the frame.",
+        "video_frame_rate": "NOT_VERIFIED - not stated in the sources reviewed."
+      },
+      "radiometry": {
+        "instrument": "Oriel 71768 thermopile detector with CaF2 window, spectral range 0.13 to 11 um, mounted in the downstream top back corner of the duct",
+        "calibration": "verified_2026_09: NOT CALIBRATED. The source states the radiometer signal was not calibrated but provided a measure of flame dynamics and steadiness.",
+        "implication_for_flarex": "No absolute radiative quantity may be derived from this channel, and no image brightness may be converted to temperature or heat release."
+      },
+      "fuels": [
+        "cast black PMMA rods, diameters 6.4 / 9.5 / 12.7 mm, length 57.2 mm, hemispherical ends (opposed-flow tests, verified_2026_09)",
+        "acrylic (PMMA) films and sheets of different thicknesses, flat samples 10 cm long x 1-2 cm wide",
+        "SIBAL cotton-fiberglass fabric blend",
+        "a section of a large solid acrylic sphere",
+        "Nomex, Ultem and wax-saturated fiberglass fabric are documented for the BASS series"
+      ],
+      "conditions": {
+        "oxygen_volume_fraction_range": [0.16, 0.21],
+        "oxygen_uncertainty": 0.003,
+        "oxygen_note": "verified_2026_09: microgravity oxygen concentration varied 16-21% with a stated uncertainty of +/-0.3% for the PMMA cylinder tests.",
+        "opposed_flow_cm_s_range": [0.4, 8.0],
+        "pressure": "NOT_VERIFIED for each test - tests were conducted in the MSG working volume at ISS cabin conditions; a per-test pressure record was not confirmed in the sources reviewed.",
+        "protocol": "verified_2026_09: ignite at a relatively high opposed flow; steady spread reached within about 1 minute; then reduce the opposed flow velocity in steps, pausing about 30 s (reported elsewhere as at least 1 minute) at each step for quasi-steady spread, until extinction is observed."
+      },
+      "published_findings_L2": [
+        "Flame spread rate first increases then decreases as opposed flow velocity increases (thermal regime giving way to chemical regime).",
+        "No flame spread observed at opposed flow velocities below about 0.6 cm/s.",
+        "Flame spread sustained at 17% oxygen in microgravity while flames could not exist in normal gravity at 18% and below, i.e. the limiting oxygen concentration is lower in microgravity for these conditions.",
+        "As flow velocity falls the flame colour shifts yellow to blue, the flame tip opens, the flame becomes longer and more spherical.",
+        "The microgravity flame is shorter without a long tail and wider than the normal-gravity flame at the same oxygen concentration.",
+        "In normal gravity the flame-induced buoyant flow is of order 30 cm/s and dominates any smaller imposed opposed flow."
+      ],
+      "primary_reference": {
+        "citation": "Link, S., Huang, X., Fernandez-Pello, C., Olson, S. & Ferkul, P. (2018). The Effect of Gravity on Flame Spread over PMMA Cylinders. Scientific Reports 8, 120.",
+        "doi": "10.1038/s41598-017-18398-4",
+        "open_access": true,
+        "license": "CC BY 4.0",
+        "verified": "verified_2026_09 - DOI read from the article metadata."
+      },
+      "additional_references": [
+        {"citation": "Olson, S. L. & Ferkul, P. V. (2017). Microgravity flammability boundary for PMMA rods in axial stagnation flow. Combustion and Flame 180, 217-229.", "doi": "10.1016/j.combustflame.2017.03.001"},
+        {"citation": "Bhattacharjee, S., Simsek, A., Miller, F., Olson, S. & Ferkul, P. (2017). Radiative, thermal, and kinetic regimes of opposed-flow flame spread. Proceedings of the Combustion Institute 36, 2963-2969.", "doi": "10.1016/j.proci.2016.06.025"},
+        {"citation": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment. NTRS 20160000593.", "uri": "https://ntrs.nasa.gov/citations/20160000593"},
+        {"citation": "Burning and Suppression of Solids-II (BASS-II) Summary Report. NTRS 20210011385.", "uri": "https://ntrs.nasa.gov/citations/20210011385"}
+      ],
+      "dataset_doi": "NOT_VERIFIED - no dataset-level DOI was located for the PSI BASS-II holdings during this review. Cite the PSI investigation identifier and the accession date instead.",
+      "flarex_mvp_selection": "PRIMARY. See DATA_SOURCES.md section 4 for the selection argument.",
+      "data_types_expected": "imagery and video, test records and metadata (exact PSI file inventory NOT_VERIFIED without an account)"
+    },
+
+    {
+      "id": "BASS",
+      "name": "Burning and Suppression of Solids",
+      "psi_listed": true,
+      "psi_completion_status": "Complete (verified_2026_09)",
+      "platform": "ISS, Microgravity Science Glovebox",
+      "gravity_condition": "microgravity",
+      "objective": "Predecessor to BASS-II; concurrent-flow spread rate, limiting flame length and other combustion characteristics measured from imagery; nitrogen suppressant engaged at increasing levels until extinction on some tests.",
+      "fuels": ["SIBAL cotton-fiberglass fabric", "Nomex", "Ultem", "PMMA", "wax-saturated fiberglass fabric", "ceramic-encased candles"],
+      "flarex_mvp_selection": "SECONDARY - same hardware lineage and imaging chain as BASS-II, so the same feature extractor applies without recalibration. Combining BASS and BASS-II is defensible for method transfer; combining their *results* requires matching fuel, geometry and flow configuration test by test.",
+      "dataset_doi": "NOT_VERIFIED"
+    },
+
+    {
+      "id": "SAFFIRE-I/II/III",
+      "name": "Spacecraft Fire Experiment I, II, III",
+      "psi_listed": true,
+      "psi_completion_status": "Complete (verified_2026_09)",
+      "platform": "Cygnus resupply vehicle, uncrewed, after departure from the ISS",
+      "gravity_condition": "microgravity",
+      "objective": "verified_2026_09: large-scale flame spread inside an orbiting spacecraft, addressing whether sample size and duration in earlier small-scale tests were large enough for unrestricted flame growth.",
+      "scale": "Saffire-I and -III burned a 94 cm long by 40.6 cm wide cotton-fiberglass fabric; Saffire-II examined an array of nine smaller samples, each 29 cm long by 5 cm wide, including a 1 cm thick flat PMMA sample.",
+      "flow": "forced airflow 20-25 cm/s, described as typical of spacecraft air circulation speeds",
+      "primary_reference": {
+        "citation": "Urban, D. L., Ferkul, P., Olson, S., Ruff, G. A., Easton, J., T'ien, J. S., Liao, Y.-T. T., Li, C., Fernandez-Pello, A. C., Torero, J. L., Legros, G., Eigenbrod, C., Smirnov, N., Fujita, O., Rouvreau, S., Toth, B. & Jomaas, G. (2019). Flame spread: Effects of microgravity and scale. Combustion and Flame 199, 168-182.",
+        "doi": "10.1016/j.combustflame.2018.10.012",
+        "verified": "verified_2026_09"
+      },
+      "flarex_mvp_selection": "NOT IN MVP. Different hardware, different imaging chain, different scale and a concurrent-flow configuration. Pooling Saffire morphology with BASS-II morphology would compare flames that differ in scale by a factor of about 15 and in flow configuration; that is not a like-for-like comparison. Saffire is used in FLARE-X as published context for the scale question, at claim level L2.",
+      "dataset_doi": "NOT_VERIFIED"
+    },
+
+    {
+      "id": "FLEX / FLEX-2",
+      "name": "Flame Extinguishment Experiment / -2",
+      "psi_listed": true,
+      "psi_completion_status": "Complete (verified_2026_09)",
+      "platform": "ISS, Combustion Integrated Rack (CIR)",
+      "gravity_condition": "microgravity",
+      "fuel_class": "liquid fuel droplets (droplet combustion)",
+      "flarex_mvp_selection": "NOT IN MVP, and this is a deliberate negative result of the dataset review. FLEX studies isolated burning droplets. A droplet flame is a spherically symmetric gas-phase problem with no solid-phase pyrolysis front and no flame spread; its morphology features (equivalent diameter, circularity) are not physically commensurate with a solid-fuel spread flame's length, width and standoff. Analysing both with one feature set would produce numbers that look comparable and are not. FLEX is listed here so the choice is visible, not hidden.",
+      "note": "FLEX remains scientifically central to microgravity extinction research, including cool-flame phenomena, and is an appropriate target for a future FLARE-X module with a droplet-specific feature set.",
+      "dataset_doi": "NOT_VERIFIED"
+    },
+
+    {
+      "id": "ACME",
+      "name": "Advanced Combustion via Microgravity Experiments",
+      "psi_listed": true,
+      "sub_investigations": ["ACME BRE (Burning Rate Emulator)", "ACME E-FIELD Flames", "ACME S-Flames (Structure and Response of Spherical Diffusion Flames)"],
+      "psi_completion_status": "Complete (verified_2026_09)",
+      "platform": "ISS, Combustion Integrated Rack",
+      "fuel_class": "gaseous, laminar non-premixed flames",
+      "flarex_mvp_selection": "NOT IN MVP. Gas-jet and spherical gaseous flames, no solid fuel and no spread front. Same commensurability argument as FLEX.",
+      "dataset_doi": "NOT_VERIFIED"
+    },
+
+    {
+      "id": "SoFIE",
+      "name": "Solid Fuel Ignition and Extinction",
+      "psi_listed": false,
+      "psi_listing_note": "NOT LISTED in the NASA PSI combustion-science investigations index reviewed for this project (index page last updated 2023-07-26). This does not mean the data do not exist or will not be archived; it means FLARE-X could not confirm public PSI availability as of 2026-09. Check PSI directly before relying on it.",
+      "platform": "ISS, Combustion Integrated Rack insert",
+      "sub_investigations": ["MIST (Material Ignition and Suppression Test)", "SMuRF (Spacecraft Materials Microgravity Research on Flammability)", "NCA (Narrow Channel Apparatus)", "RTDFS (Residence Time Driven Flame Spread)", "GEL (Growth and Extinction Limit)"],
+      "objective": "verified_2026_09: ignition and flammability of solid spacecraft materials in practical geometries and realistic atmospheric conditions, at oxygen concentrations and pressures representative of planned Space Exploration Atmospheres.",
+      "stated_relevance": "verified_2026_09: NASA states SoFIE objectives include validating NASA materials-flammability selection 1-g test protocols for low-gravity fires, improving understanding of early fire growth, and determining suppression techniques by diluents, flow reduction and venting.",
+      "flarex_mvp_selection": "NOT IN MVP, but it is the most important forward target. SoFIE is the closest successor to BASS-II in fuel, geometry and purpose, so a feature extractor built and validated on BASS-II is the natural instrument to point at SoFIE data when it is released.",
+      "dataset_doi": "NOT_VERIFIED"
+    }
+  ],
+
+  "standards": [
+    {
+      "id": "NASA-STD-6001",
+      "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+      "current_version": "B w/CHANGE 3 (verified_2026_09 from standards.nasa.gov, status ACTIVE)",
+      "landing_page": "https://standards.nasa.gov/standard/nasa/nasa-std-6001",
+      "relevance_to_flarex": "Test 1 is an upward flame propagation screening test conducted in normal gravity. The peer-reviewed microgravity result that a limiting oxygen concentration can be LOWER in microgravity than in normal gravity for these conditions is precisely why NASA's own SoFIE objectives include validating 1-g flammability protocols for low-gravity fires. FLARE-X measures features relevant to that question. FLARE-X is NOT a certification tool and produces no pass/fail determination against this or any standard."
+    }
+  ],
+
+  "claim_levels": {
+    "L1_NASA_FACT": "NASA-documented fact: hardware, protocol, instrument specification, metadata.",
+    "L2_PUBLISHED": "Peer-reviewed published finding.",
+    "L3_MEASURED": "Measured by FLARE-X from archived data.",
+    "L4_DERIVED": "Derived analytically by FLARE-X from L3 quantities.",
+    "L5_CONCEPT": "FLARE-X forward-looking concept; not an observation."
+  }
+}

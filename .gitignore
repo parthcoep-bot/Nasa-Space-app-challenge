@@ -1,0 +1,15 @@
+data/raw/**
+!data/raw/*/ACQUISITION_MANIFEST.json
+!data/raw/*/FILE_INVENTORY.json
+data/interim/**
+data/processed/**
+frontend/index.html
+frontend/payload.json
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+flare-x-repo/
+files (2)/
+.DS_Store
+Thumbs.db

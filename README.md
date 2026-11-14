@@ -1,0 +1,162 @@
+# FLARE-X
+
+**Flame Learning, Analysis, Risk & Extinction Explorer**
+
+An interpretable analysis layer for archived NASA microgravity combustion imagery.
+
+NASA Space Apps Challenge 2026 — *Flame in Freefall: AI-Powered Fire Safety Insights
+from Microgravity Combustion Data*
+
+> 🚀 **Quick Navigation & Submission Deliverables:**
+> - 📄 **[Official Submission Package (SUBMISSION.md)](SUBMISSION.md)** — Complete text for the NASA Space Apps submission form, including the **7-Slide Presentation Deck**, **30-Second Timed Pitch**, SI disclosure, and citations.
+> - 💻 **[Interactive Live Dashboard (index.html)](index.html)** — Self-contained, zero-dependency, offline-ready microgravity combustion intelligence dashboard.
+
+
+---
+
+## What this is, stated plainly
+
+FLARE-X is a **NASA-data-driven research prototype**. It reads archived microgravity
+combustion video, segments the flame, measures its shape and brightness frame by
+frame, detects the moments where the combustion regime changes, and reports an
+interpretable indicator of how far the flame's appearance has moved toward the
+appearance reported for near-limit flames — with an uncertainty attached to every
+number and a provenance chain back to the source file.
+
+**It is not** a NASA product, not NASA-endorsed, not NASA-validated, not a
+certification system, and not a fire-risk predictor. It makes no pass/fail
+determination against NASA-STD-6001 or any other standard.
+
+## The research question
+
+> In BASS-II opposed-flow flame spread over PMMA rods, the commanded oxidiser flow
+> was stepped downward in quasi-steady increments until extinction. **Can a
+> per-frame, image-derived morphological feature set recover those imposed steps as
+> detectable change points, and does the resulting morphology-versus-flow response
+> carry a reproducible, monotone signature of approach to the low-velocity
+> extinction limit?**
+
+This is narrower than "how does fire behave in space", and that is the point. It is
+a question this data can actually answer, with a built-in falsification test: the
+change points FLARE-X detects must line up with the flow steps that are burned into
+the video's telemetry overlay and recorded in the test log. If they do not, the
+method has failed, and the repository says so.
+
+## The gap being filled
+
+NASA's peer-reviewed BASS-II analysis reports flame-spread rates measured by
+tracking the flame leading edge, and describes near-limit morphology
+**qualitatively** — the flame becomes longer, more spherical, dimmer, and shifts
+from yellow to blue as flow falls toward the limit
+(Link et al. 2018, [doi:10.1038/s41598-017-18398-4](https://doi.org/10.1038/s41598-017-18398-4)).
+
+Those qualitative descriptions are correct, published, and not quantified per frame.
+FLARE-X contributes **the measurement layer**: an open, reproducible extractor that
+turns those descriptions into time series with uncertainty, and a change-point
+analysis that ties them to the commanded flow schedule.
+
+We are not claiming to discover the physics. We are claiming to make an existing,
+published qualitative observation measurable, auditable and reusable.
+
+## Why a generic flame detector fails here
+
+Almost every off-the-shelf fire detector keys on the red channel or a
+fire-coloured hue range. **The near-limit microgravity flame is dim and blue.** A
+red-channel detector suppresses the flame precisely where the science is. FLARE-X
+segments on a soot-independent radiance proxy, `max(R,G,B)`, and treats colour as a
+*separate measured feature* — the sootiness index χ = (R−B)/(R+B) — which quantifies
+the published yellow-to-blue transition instead of being defeated by it.
+
+There is a test for this: `tests/test_flarex.py::test_red_channel_only_detector_would_miss_it`.
+
+## The pipeline
+
+```
+archived video
+   ↓  background estimate, telemetry-overlay masking
+segmentation          hysteresis on max(R,G,B), noise-gated   → IoU/Dice scored
+   ↓
+morphology            area, length, width, aspect, standoff,
+                      circularity, leading edge, χ, radiance
+   ↓                  resolved against the FLOW axis, not the image axis
+change points         multivariate binary segmentation        → scored against
+   ↓                                                            the flow schedule
+combustion states     ignition / growth / quasi-steady /
+                      transition / weakening / extinction
+   ↓
+extinction proximity  interpretable weighted composite        → monotonicity tested
+   ↓                                                            against commanded flow
+uncertainty budget    segmentation sweep + quantisation +
+                      scale + timing, biases named not hidden
+   ↓
+provenance            every number chained back to a file hash
+```
+
+**The scientific pipeline runs with no language model, no web app and no network.**
+That is a design requirement. `python scripts/validate_pipeline.py` exercises the
+whole chain offline.
+
+## Quick start
+
+```bash
+git clone <this-repo> && cd flare-x
+pip install -r requirements.txt
+
+# 1. Verify the pipeline against exact ground truth (no NASA data needed)
+python scripts/validate_pipeline.py
+
+# 2. Run the tests
+python -m pytest tests/ -q
+
+# 3. Set up a real data acquisition (requires your own free PSI registration)
+python scripts/acquire_psi.py init --investigation BASS-II
+#    ... download into data/raw/BASS-II ...
+python scripts/acquire_psi.py verify --investigation BASS-II
+python scripts/run_analysis.py --investigation BASS-II --video <file>
+```
+
+## About the data
+
+**FLARE-X ships no NASA data.** The NASA Physical Sciences Informatics repository
+requires individual registration; users obtain data under their own account, which
+keeps attribution and terms of use intact. `scripts/acquire_psi.py` makes a manual
+download reproducible by hashing every file and pinning results to those hashes.
+
+Full dataset review, including the investigations we examined and **rejected**, is
+in [DATA_SOURCES.md](DATA_SOURCES.md).
+
+## Verification status of the numbers in this repository
+
+| Claim level | Meaning | Example |
+|---|---|---|
+| **L1** | NASA-documented fact | BASS-II used a Panasonic WV-CP654, 760×480, with a burned-in telemetry overlay |
+| **L2** | Peer-reviewed finding | Flame spread sustained at 17% O₂ in µg where 1 g flames could not exist at 18% |
+| **L3** | Measured by FLARE-X from archived data | projected flame area at frame *n*, ± budgeted uncertainty |
+| **L4** | Derived by FLARE-X | the extinction proximity index |
+| **L5** | FLARE-X concept | the forward mission concept in `docs/MISSION_CONCEPT.md` |
+
+The provenance layer **enforces** this: constructing a measurement labelled as NASA
+fact without a repository root in its chain raises an exception. See
+`analysis/flarex/provenance.py`.
+
+Where a value could not be confirmed, the repository records `NOT_VERIFIED` and the
+reason. It is never replaced with a plausible-looking number.
+
+## Documentation
+
+| File | What is in it |
+|---|---|
+| [DATA_SOURCES.md](DATA_SOURCES.md) | Dataset review, selection argument, what we rejected and why |
+| [SCIENTIFIC_METHOD.md](SCIENTIFIC_METHOD.md) | Question → hypotheses → method → interpretation → limitation |
+| [VALIDATION.md](VALIDATION.md) | Every metric, how it was obtained, and what it does not cover |
+| [MODEL_CARD.md](MODEL_CARD.md) | Every free parameter, intended use, out-of-scope use |
+| [LIMITATIONS.md](LIMITATIONS.md) | The honest list, including the ones that hurt |
+| [CITATIONS.md](CITATIONS.md) | Real references with verification status per entry |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System design |
+| [AWARD_ALIGNMENT.md](AWARD_ALIGNMENT.md) | Space Apps global award mapping, with claims to avoid |
+| [DEMO_SCRIPT.md](DEMO_SCRIPT.md) | 3-minute judge demo and 90-second video script |
+
+## License
+
+Code: MIT (see [LICENSE](LICENSE)). Documentation: CC BY 4.0.
+NASA data is **not** included and remains subject to NASA's terms.

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLARE-X — flame measurement from archived microgravity combustion imagery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --duct:#14171C; --plate:#1B1F26; --plate2:#20252D; --rule:#2E3742;
+  --soot:#E39B3A; --chemi:#6BA4E8; --ink:#DDE3EA; --dim:#8A96A5; --faint:#5C6773;
+  --warn:#C9683F; --ok:#5E9C7A;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+:root:not([data-theme="dark"]){
+  --duct:#F2F0EC; --plate:#FFFFFF; --plate2:#F7F6F3; --rule:#D8D4CD;
+  --soot:#A9691A; --chemi:#2F6AAE; --ink:#1A1D22; --dim:#5A636E; --faint:#8A929C;
+  --warn:#9A4520; --ok:#3C6E54;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --duct:#F2F0EC; --plate:#FFFFFF; --plate2:#F7F6F3; --rule:#D8D4CD;
+    --soot:#A9691A; --chemi:#2F6AAE; --ink:#1A1D22; --dim:#5A636E; --faint:#8A929C;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--duct);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.58;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+a{color:var(--chemi)} a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--chemi);outline-offset:3px}
+h1,h2,h3{line-height:1.2;letter-spacing:-.015em;margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---- masthead ---- */
+.mast{border-bottom:1px solid var(--rule);background:var(--plate);position:sticky;top:0;z-index:20}
+.mast .wrap{display:flex;align-items:center;gap:20px;height:56px;flex-wrap:wrap}
+.brand{font-weight:700;letter-spacing:.02em;font-size:15px}
+.brand span{color:var(--soot)}
+.mast nav{display:flex;gap:16px;margin-left:auto;font-size:13px;overflow-x:auto}
+.mast nav a{color:var(--dim);text-decoration:none;white-space:nowrap}
+.mast nav a:hover{color:var(--ink)}
+.tbtn{background:none;border:1px solid var(--rule);color:var(--dim);border-radius:2px;
+  padding:4px 9px;font:inherit;font-size:12px;cursor:pointer}
+
+/* ---- hero ---- */
+.hero{padding:64px 0 8px}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:20px}
+.hero h1{font-size:clamp(34px,6vw,62px);font-weight:600;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--soot)}
+.stand{max-width:62ch;margin-top:20px;font-size:18px;color:var(--dim)}
+.stand strong{color:var(--ink);font-weight:500}
+
+/* ---- status strip ---- */
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin:40px 0 0}
+.status div{background:var(--plate);padding:14px 16px}
+.status dt{font-family:var(--mono);font-size:11px;color:var(--faint);margin-bottom:5px}
+.status dd{margin:0;font-size:14px}
+.chip{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 6px;
+  border:1px solid currentColor;border-radius:2px;vertical-align:1px}
+.c-ok{color:var(--ok)} .c-warn{color:var(--warn)} .c-dim{color:var(--faint)}
+
+/* ---- the staircase ---- */
+.stair{margin:56px 0 0;border:1px solid var(--rule);background:var(--plate)}
+.stair-hd{padding:16px 20px;border-bottom:1px solid var(--rule);
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.stair-hd h2{font-size:17px;font-weight:600}
+.stair-hd p{margin:0;font-size:13px;color:var(--dim);max-width:56ch}
+.stair svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:20px;padding:12px 20px;border-top:1px solid var(--rule);
+  font-size:12px;color:var(--dim);flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px}
+
+/* ---- sections ---- */
+section{padding:72px 0;border-top:1px solid var(--rule)}
+.sechd{display:flex;gap:18px;align-items:baseline;margin-bottom:12px}
+.stage{font-family:var(--mono);font-size:12px;color:var(--soot);padding-top:5px}
+.sechd h2{font-size:clamp(23px,3.2vw,31px);font-weight:600}
+.lede{max-width:66ch;color:var(--dim);margin:0 0 30px 46px;font-size:16px}
+@media(max-width:640px){.lede{margin-left:0}}
+
+.panel{border:1px solid var(--rule);background:var(--plate)}
+.panel-hd{padding:12px 16px;border-bottom:1px solid var(--rule);font-size:13px;color:var(--dim)}
+.panel-bd{padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;color:var(--faint);font-weight:500}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+
+/* ---- frame analyser ---- */
+.viewer{display:grid;grid-template-columns:1.25fr .85fr;gap:0}
+@media(max-width:900px){.viewer{grid-template-columns:1fr}}
+.stage-img{background:#000;position:relative;min-height:220px;display:flex;align-items:center;justify-content:center}
+.stage-img img{width:100%;display:block;image-rendering:auto}
+.stage-img .none{color:var(--faint);font-family:var(--mono);font-size:12px;padding:40px 24px;text-align:center;max-width:44ch}
+.readout{border-left:1px solid var(--rule)}
+@media(max-width:900px){.readout{border-left:none;border-top:1px solid var(--rule)}}
+.readout dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:0}
+.readout dt,.readout dd{padding:7px 14px;border-bottom:1px solid var(--rule);margin:0;font-size:13px}
+.readout dt{color:var(--dim)}
+.readout dd{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.ctrls{padding:14px 16px;border-top:1px solid var(--rule);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ctrls input[type=range]{flex:1;min-width:170px;accent-color:var(--chemi)}
+.ctrls label{font-size:12px;color:var(--dim);font-family:var(--mono)}
+.tog{display:flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.tog button{background:var(--plate2);border:none;color:var(--dim);font:inherit;font-size:12px;
+  padding:5px 11px;cursor:pointer}
+.tog button[aria-pressed=true]{background:var(--chemi);color:var(--duct)}
+
+/* ---- charts ---- */
+.chart{width:100%;height:auto;display:block}
+.axlab{font-family:var(--mono);font-size:9px;fill:var(--faint)}
+
+/* ---- epi attribution ---- */
+.bars{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.bar{display:grid;grid-template-columns:118px 1fr 52px;gap:10px;align-items:center;font-size:12.5px}
+.bar .track{height:15px;background:var(--plate2);border:1px solid var(--rule);position:relative}
+.bar .fill{height:100%;background:var(--chemi)}
+.bar .v{font-family:var(--mono);text-align:right;color:var(--dim);font-size:11.5px}
+
+/* ---- provenance chain ---- */
+.chain{font-family:var(--mono);font-size:12.5px;line-height:2}
+.chain li{list-style:none;padding-left:0}
+.chain li::before{content:"└─ ";color:var(--faint)}
+.chain li:first-child::before{content:""}
+.chain li{padding-left:calc(var(--d,0) * 14px)}
+
+/* ---- notes & callouts ---- */
+.note{border-left:2px solid var(--soot);padding:2px 0 2px 16px;margin:20px 0;
+  color:var(--dim);font-size:14.5px;max-width:68ch}
+.note strong{color:var(--ink);font-weight:600}
+.warnbox{border:1px solid var(--warn);background:var(--plate);padding:14px 16px;
+  font-size:13.5px;color:var(--ink);margin:0 0 30px}
+.warnbox b{color:var(--warn)}
+.kv{font-family:var(--mono);font-size:12px;color:var(--dim)}
+footer{border-top:1px solid var(--rule);padding:40px 0 60px;color:var(--faint);font-size:13px}
+footer a{color:var(--dim)}
+.small{font-size:12.5px;color:var(--faint)}
+ul.tight{margin:10px 0 0;padding-left:18px;color:var(--dim);font-size:14px}
+ul.tight li{margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">FLARE<span>-</span>X</div>
+    <nav>
+      <a href="#staircase">Protocol</a><a href="#data">Data</a><a href="#frames">Frames</a>
+      <a href="#morph">Morphology</a><a href="#states">States</a><a href="#epi">Index</a>
+      <a href="#physics">Physics</a><a href="#prov">Provenance</a><a href="#valid">Validation</a>
+    </nav>
+    <button class="tbtn" id="theme" type="button">Light</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="hero">
+  <p class="kicker">Flame Learning, Analysis, Risk &amp; Extinction Explorer · NASA Space Apps 2026</p>
+  <h1>On Earth, fire rises. In free fall, it <em>doesn't</em>.</h1>
+  <p class="stand">NASA flew acrylic rods in a small wind tunnel on the Space Station and
+  stepped the oxidiser flow down until the flame went out. The published analysis says that
+  near the limit the flame grows longer, dimmer and turns from yellow to blue.
+  <strong>True, peer-reviewed, and never measured frame by frame.</strong> FLARE-X is the
+  measurement layer that makes it measurable — with an error bar on every number and a chain
+  back to the file it came from.</p>
+
+  <dl class="status" id="status"></dl>
+</div>
+
+<div class="stair" id="staircase">
+  <div class="stair-hd">
+    <h2>The protocol is a staircase, and that is what makes this falsifiable</h2>
+    <p>Ignition at high flow, then the commanded oxidiser velocity stepped down with a
+    quasi-steady dwell at each level, until extinction. Every riser is an externally
+    imposed event, so the transitions FLARE-X detects from imagery alone can be
+    <em>scored</em> against something the pixels did not produce.</p>
+  </div>
+  <div id="stairsvg"></div>
+  <div class="legend">
+    <span><i style="background:var(--soot)"></i>Commanded flow, cm/s</span>
+    <span><i style="background:var(--chemi)"></i>Change point detected from imagery</span>
+    <span><i style="background:var(--faint)"></i>Extinction</span>
+    <span class="kv" id="stairstat"></span>
+  </div>
+</div>
+
+<!-- 01 DATA -->
+<section id="data">
+  <div class="sechd"><div class="stage">01</div><h2>What we used, and what we rejected</h2></div>
+  <p class="lede">A dataset review that only lists what you kept is not a review. Three
+  investigations were examined and excluded on commensurability grounds — the reasons are
+  more informative than the selection.</p>
+  <div class="panel"><div class="panel-hd">NASA Physical Sciences Informatics · combustion science</div>
+    <div style="overflow-x:auto"><table id="regtable"></table></div>
+  </div>
+  <div class="note"><strong>Access is real, and so is the barrier.</strong> PSI requires
+  individual registration. FLARE-X ships no NASA data; each user downloads under their own
+  account, and every file is hashed so a result can never silently drift onto different bytes.</div>
+</section>
+
+<!-- 02 FRAMES -->
+<section id="frames">
+  <div class="sechd"><div class="stage">02</div><h2>Segmentation that survives the blue flame</h2></div>
+  <p class="lede">Almost every off-the-shelf fire detector keys on the red channel. The
+  near-limit flame is dim and blue, so a red-channel rule suppresses the flame exactly where
+  the science is. FLARE-X segments on a soot-independent radiance proxy and measures colour
+  <em>separately</em>, as the sootiness index χ = (R−B)/(R+B).</p>
+  <div class="panel">
+    <div class="panel-hd" id="framehd"></div>
+    <div class="viewer">
+      <div class="stage-img" id="frameimg"></div>
+      <div class="readout"><dl id="framedl"></dl></div>
+    </div>
+    <div class="ctrls">
+      <label for="fslider">Keyframe</label>
+      <input type="range" id="fslider" min="0" value="0" step="1">
+      <div class="tog"><button id="bRaw" type="button" aria-pressed="false">Raw</button><button id="bSeg" type="button" aria-pressed="true">Contour</button></div>
+    </div>
+  </div>
+  <div class="note"><strong>χ is a colour index, not a temperature.</strong> The BASS-II
+  video camera was not radiometrically calibrated and the in-duct thermopile radiometer is
+  documented by NASA as uncalibrated. No function in this project converts brightness to
+  temperature, heat release or soot volume fraction — the channel is named
+  <span class="mono">radiance_proxy</span> so the constraint cannot be forgotten.</div>
+</section>
+
+<!-- 03 MORPHOLOGY -->
+<section id="morph">
+  <div class="sechd"><div class="stage">03</div><h2>Morphology, resolved against the flow axis</h2></div>
+  <p class="lede">Area, flow-axis length, aspect ratio and standoff — measured against the
+  duct geometry, not the image axes, so a rotated camera does not change the physics. A dark
+  frame returns <span class="mono">None</span>, not a zero-area flame: an absent flame is a
+  gap in the record, which is a different thing from a flame of zero size.</p>
+  <div class="grid2" id="morphcharts"></div>
+</section>
+
+<!-- 04 STATES -->
+<section id="states">
+  <div class="sechd"><div class="stage">04</div><h2>Combustion states, from rules you can check by hand</h2></div>
+  <p class="lede">Change-point detection plus explicit inequalities. No learned parameters,
+  so nothing can silently memorise a dataset and every boundary traces to a comparison a
+  reviewer can verify. A supervised classifier is only justified once it beats this on
+  held-out labels — those labels do not exist yet, so no model is shipped.</p>
+  <div class="panel"><div class="panel-hd">State timeline</div><div id="stateband"></div>
+    <div style="overflow-x:auto;border-top:1px solid var(--rule)"><table id="statetable"></table></div>
+  </div>
+  <div class="warnbox" style="margin-top:22px"><b>Untested classes.</b> The validation
+  phantom is stationary within each dwell by construction, so
+  <span class="mono">WEAKENING</span>, <span class="mono">TRANSITION</span> and
+  <span class="mono">RE_IGNITION</span> are never exercised and their accuracy is unmeasured.
+  Adding drift would exercise them and would mean inventing more physics — which makes the
+  gap harder to see, not smaller. It is left visible.</div>
+</section>
+
+<!-- 05 EPI -->
+<section id="epi">
+  <div class="sechd"><div class="stage">05</div><h2>Extinction proximity, taken apart term by term</h2></div>
+  <p class="lede">Five terms, each one quantifying something already published
+  <em>qualitatively</em> about near-limit flames. Because the index is a weighted sum of
+  normalised terms, the per-frame attribution below is <strong>exact</strong> — not a SHAP
+  estimate of an opaque model.</p>
+  <div class="warnbox" id="epidisc"></div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-hd">Index against commanded flow</div>
+      <div class="panel-bd"><div id="epichart"></div></div></div>
+    <div class="panel"><div class="panel-hd" id="epiathd">Attribution at the selected keyframe</div>
+      <div class="panel-bd"><div class="bars" id="epibars"></div>
+      <p class="small" style="margin-top:16px" id="epimono"></p></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="panel-hd">Why each term is in the index</div>
+    <div style="overflow-x:auto"><table id="epiterms"></table></div></div>
+  <div class="note"><strong>One branch only.</strong> Flame spread rate is non-monotonic in
+  opposed flow velocity — it rises, then falls. The monotonicity check is only meaningful
+  below the turning point. Applying it across the full flow range would be a misuse of it.</div>
+</section>
+
+<!-- 06 PHYSICS -->
+<section id="physics">
+  <div class="sechd"><div class="stage">06</div><h2>Why removing gravity removes a transport channel</h2></div>
+  <p class="lede">Gravity enters through the body-force term, so the Grashof number scales
+  linearly with g and the buoyant velocity scale as √g. These are computed from inputs you
+  can see and change — and the functions <em>refuse</em> to run without them.</p>
+  <div class="grid3" id="phys"></div>
+  <div class="panel" style="margin-top:20px">
+    <div class="panel-hd">What happens if you ask for a number without the data to compute it</div>
+    <div class="panel-bd"><pre class="mono" id="refusal" style="margin:0;white-space:pre-wrap;font-size:12.5px;color:var(--warn)"></pre></div>
+  </div>
+  <div class="note"><strong>The mechanism is published, not ours.</strong> At very low flow
+  the flame is weak and stands off behind a thickened boundary layer. Heat transfer to the
+  solid falls, surface re-radiation comes to dominate the energy balance, and oxygen
+  transport becomes limiting — the radiative / transport-limited extinction branch. FLARE-X
+  measures appearance consistent with that mechanism. Consistency is not confirmation.</div>
+</section>
+
+<!-- 07 PROVENANCE -->
+<section id="prov">
+  <div class="sechd"><div class="stage">07</div><h2>Every number knows where it came from</h2></div>
+  <p class="lede">Claim levels are enforced in code, not by convention: constructing a
+  measurement labelled as NASA fact without a repository root in its chain raises an
+  exception, and a measurement with status OK but no value raises too.</p>
+  <div class="grid2">
+    <div class="panel"><div class="panel-hd">Provenance chain for one measurement</div>
+      <div class="panel-bd"><ul class="chain" id="chain" style="margin:0;padding:0"></ul>
+      <p class="small" id="measline" style="margin-top:18px"></p></div></div>
+    <div class="panel"><div class="panel-hd">Uncertainty budget</div>
+      <div class="panel-bd"><pre class="mono" id="budget" style="margin:0;white-space:pre-wrap;font-size:12px;color:var(--dim);line-height:1.7"></pre></div></div>
+  </div>
+</section>
+
+<!-- 08 VALIDATION -->
+<section id="valid">
+  <div class="sechd"><div class="stage">08</div><h2>What is validated, and what is not</h2></div>
+  <p class="lede">Two stages. Stage 1 asks whether the software measures correctly and is
+  complete. Stage 2 asks whether it measures <em>real flames</em> correctly, needs archived
+  NASA video, and has not been run.</p>
+  <div class="warnbox"><b>Read this before quoting any number below.</b> These are
+  properties of the software, measured against a synthetic phantom with an invented
+  appearance model. <b>None is a measurement of a flame.</b> Until Stage 2 is run, FLARE-X
+  has a validated instrument and no validated scientific result.</div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-hd">Segmentation against exact ground truth</div>
+      <div style="overflow-x:auto"><table id="vseg"></table></div></div>
+    <div class="panel"><div class="panel-hd">Change points against known events</div>
+      <div style="overflow-x:auto"><table id="vcp"></table></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="panel-hd">Two defects this harness caught</div>
+    <div class="panel-bd">
+      <p style="margin:0 0 12px;font-size:14.5px;color:var(--dim)"><strong style="color:var(--ink)">25 false-positive frames after extinction.</strong>
+      Otsu's method returns a threshold on any input, including pure sensor noise. That defect
+      would have corrupted every extinction time the system produced. Fixed with a detection
+      gate set relative to the extreme-value noise scale σ√(2 ln N) — about 5σ over a 760×480
+      frame, so a fixed &ldquo;6σ&rdquo; rule sits barely above the noise ceiling — plus an
+      independent noise floor on the hysteresis growth threshold.</p>
+      <p style="margin:0;font-size:14.5px;color:var(--dim)"><strong style="color:var(--ink)">A falsely confident error bar.</strong>
+      Sweeping only the high hysteresis threshold reported ≈0 % segmentation uncertainty,
+      correctly — in hysteresis thresholding the grown region is set by the <em>low</em>
+      threshold, so that sweep was nearly a no-op. Both thresholds now move together, giving
+      the 3.1 % figure actually used in the budget.</p>
+    </div>
+  </div>
+  <div class="note" style="border-left-color:var(--warn)"><strong>Still open.</strong>
+  Real-data segmentation accuracy stratified by regime · inter-annotator agreement on state
+  boundaries · robustness to automatic gain control and crew hand motion · whether the video
+  scale is recoverable at all · EPI weight sensitivity · two change points that remain
+  unexplained.</div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <p style="margin:0 0 10px"><strong style="color:var(--dim)">FLARE-X is a NASA-data-driven
+  research prototype.</strong> Not a NASA product. Not NASA-endorsed, NASA-validated or
+  NASA-approved. Not a certification system and not a fire predictor. It makes no pass/fail
+  determination against NASA-STD-6001 or any other standard.</p>
+  <p style="margin:0">Code MIT · documentation CC BY 4.0 · NASA data not included and subject
+  to NASA's terms. Primary reference: Link, Huang, Fernandez-Pello, Olson &amp; Ferkul,
+  <em>The Effect of Gravity on Flame Spread over PMMA Cylinders</em>, Sci. Rep. 8:120 (2018),
+  <a href="https://doi.org/10.1038/s41598-017-18398-4">doi:10.1038/s41598-017-18398-4</a>, CC BY 4.0.</p>
+</div></footer>
+
+<script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+const P = JSON.parse(document.getElementById('payload').textContent);
+const $ = s => document.querySelector(s);
+const el = (t,c,h) => { const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; };
+const fmt = (v,d=3) => (v==null||!isFinite(v)) ? '—' : (Math.abs(v)>=1e5||(Math.abs(v)<1e-3&&v!==0) ? v.toExponential(2) : v.toFixed(d));
+const NS='http://www.w3.org/2000/svg';
+const svg=(w,h)=>{const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.setAttribute('class','chart');s.setAttribute('preserveAspectRatio','xMidYMid meet');return s;};
+const mk=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+/* theme */
+const tb=$('#theme');
+tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');tb.textContent=d?'Dark':'Light';
+  document.querySelectorAll('[data-chart]').forEach(n=>n.remove());draw();};
+
+/* ---------- status ---------- */
+(function(){const d=$('#status');
+ [['Instrument',P.status.instrument,'c-ok'],
+  ['Scientific result',P.status.scientific_result,'c-warn'],
+  ['Data shown here',P.banner.split('.')[0],'c-warn'],
+  ['Pipeline',P.status.pipeline_version,'c-dim']].forEach(([k,v,c])=>{
+   const w=el('div');w.append(el('dt',null,k));
+   w.append(el('dd',null,`<span class="chip ${c}">${c==='c-ok'?'OK':c==='c-warn'?'NOTE':'v'}</span> ${v}`));
+   d.append(w);});})();
+
+/* ---------- staircase ---------- */
+function staircase(){
+  const W=1100,H=250,L=58,R=22,T=26,B=40;
+  const flow=P.run.commanded_flow_cm_s, n=flow.length;
+  const s=svg(W,H); s.dataset.chart=1;
+  const mx=Math.max(...flow)*1.12;
+  const X=i=>L+(i/(n-1))*(W-L-R), Y=v=>H-B-(v/mx)*(H-T-B);
+  for(let g=0;g<=4;g++){const v=mx*g/4;
+    s.append(mk('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'var(--rule)','stroke-width':1}));
+    const t=mk('text',{x:L-8,y:Y(v)+3,'text-anchor':'end',class:'axlab'});t.textContent=v.toFixed(1);s.append(t);}
+  let d=`M ${X(0)} ${Y(flow[0])}`;
+  for(let i=1;i<n;i++){ if(flow[i]!==flow[i-1]) d+=` L ${X(i)} ${Y(flow[i-1])}`; d+=` L ${X(i)} ${Y(flow[i])}`; }
+  s.append(mk('path',{d,fill:'none',stroke:'var(--soot)','stroke-width':2.2,'stroke-linejoin':'miter'}));
+  const ext=P.run.true_extinction_frame;
+  s.append(mk('line',{x1:X(ext),x2:X(ext),y1:T,y2:H-B,stroke:'var(--faint)','stroke-width':1.4,'stroke-dasharray':'3 3'}));
+  const et=mk('text',{x:X(ext)+6,y:T+12,class:'axlab'});et.textContent='extinction';s.append(et);
+  P.run.detected_change_points.forEach(cp=>{
+    s.append(mk('path',{d:`M ${X(cp)} ${H-B} l -5 10 l 10 0 z`,fill:'var(--chemi)'}));
+    s.append(mk('line',{x1:X(cp),x2:X(cp),y1:T,y2:H-B,stroke:'var(--chemi)','stroke-width':1,opacity:.34}));});
+  [['frame 0',0],[`frame ${n-1}`,n-1]].forEach(([lab,i])=>{
+    const t=mk('text',{x:X(i),y:H-6,'text-anchor':i?'end':'start',class:'axlab'});t.textContent=lab;s.append(t);});
+  const yl=mk('text',{x:14,y:T+4,class:'axlab'});yl.textContent='cm/s';s.append(yl);
+  $('#stairsvg').innerHTML='';$('#stairsvg').append(s);
+  const a=P.validation.change_point_detection.alignment_to_all_known_events;
+  $('#stairstat').textContent=`recall ${a.recall.toFixed(3)} · precision ${a.precision.toFixed(3)} · mean |offset| ${a.mean_abs_offset_frames} frames`;
+}
+
+/* ---------- registry ---------- */
+(function(){const t=$('#regtable');
+ t.innerHTML='<thead><tr><th>Investigation</th><th>Platform</th><th>Fuel class</th><th>Decision</th></tr></thead>';
+ const tb=el('tbody');
+ P.registry.investigations.forEach(i=>{
+  const sel=i.flarex_mvp_selection||'';
+  const isP=sel.startsWith('PRIMARY'), isS=sel.startsWith('SECONDARY');
+  const chip=isP?'<span class="chip c-ok">PRIMARY</span>':isS?'<span class="chip c-dim">SECONDARY</span>':'<span class="chip c-warn">EXCLUDED</span>';
+  const why=sel.replace(/^(PRIMARY|SECONDARY|NOT IN MVP)[.,]?\s*/,'').split('.').slice(0,2).join('.')+'.';
+  const r=el('tr');
+  r.innerHTML=`<td><strong>${i.id}</strong><div class="small">${i.name}</div></td>
+   <td class="small">${(i.platform||'—')}</td>
+   <td class="small">${i.fuel_class||(i.fuels?i.fuels[0].split(',')[0]:'—')}</td>
+   <td>${chip}<div class="small" style="margin-top:5px;max-width:46ch">${why}</div></td>`;
+  tb.append(r);});
+ t.append(tb);})();
+
+/* ---------- frame analyser ---------- */
+let kf=0, showSeg=true;
+function renderFrame(){
+  const k=P.keyframes[kf];
+  $('#framehd').innerHTML=`frame <span class="mono">${k.frame}</span> · t = <span class="mono">${k.time_s.toFixed(2)} s</span> · commanded flow <span class="mono">${k.commanded_flow_cm_s.toFixed(2)} cm/s</span>`;
+  const img=$('#frameimg');img.innerHTML='';
+  if(!k.detected && !showSeg===false && !k.features){
+    img.append(el('div','none','NO FLAME DETECTED<br><br>'+(k.empty_reason||'')));
+  } else {
+    const i=el('img');i.src=showSeg?k.overlay:k.image;
+    i.alt=showSeg?'frame with segmentation contour':'raw frame';img.append(i);
+  }
+  const dl=$('#framedl');dl.innerHTML='';
+  const rows = k.features ? [
+    ['projected area','px²',k.features.area_px,1],
+    ['flame length (flow axis)','px',k.features.flame_length_px,1],
+    ['flame width','px',k.features.flame_width_px,1],
+    ['aspect ratio','',k.features.aspect_ratio,3],
+    ['circularity','',k.features.circularity,3],
+    ['standoff','px',k.features.standoff_px,1],
+    ['sootiness index χ','',k.features.sootiness_index,3],
+    ['relative radiance','arb.',k.features.radiance_mean,4],
+    ['IoU vs ground truth','',k.iou_vs_truth,4],
+    ['extinction proximity','',k.epi,3],
+  ] : [['status','','no flame',0]];
+  rows.forEach(([a,u,v,d])=>{
+    dl.append(el('dt',null,a+(u?` <span class="kv">${u}</span>`:'')));
+    dl.append(el('dd',null,typeof v==='string'?v:fmt(v,d)));});
+  epiBars();
+}
+(function(){const s=$('#fslider');s.max=P.keyframes.length-1;
+ s.oninput=e=>{kf=+e.target.value;renderFrame();};
+ const setT=v=>{showSeg=v;$('#bSeg').setAttribute('aria-pressed',v);$('#bRaw').setAttribute('aria-pressed',!v);renderFrame();};
+ $('#bSeg').onclick=()=>setT(true);$('#bRaw').onclick=()=>setT(false);})();
+
+/* ---------- line chart ---------- */
+function line(container,title,key,unit,colour){
+  const W=520,H=190,L=52,R=14,T=22,B=28;
+  const y=P.series[key], n=y.length;
+  const fin=y.filter(v=>v!=null&&isFinite(v));
+  const p=el('div','panel');p.append(el('div','panel-hd',`${title}${unit?` <span class="kv">${unit}</span>`:''}`));
+  const bd=el('div','panel-bd');
+  if(!fin.length){bd.append(el('p','small','no finite values'));p.append(bd);container.append(p);return;}
+  const lo=Math.min(...fin),hi=Math.max(...fin),pad=(hi-lo||1)*.12;
+  const s=svg(W,H);s.dataset.chart=1;
+  const X=i=>L+(i/(n-1))*(W-L-R), Y=v=>H-B-((v-(lo-pad))/((hi+pad)-(lo-pad)))*(H-T-B);
+  for(let g=0;g<=3;g++){const v=(lo-pad)+((hi+pad)-(lo-pad))*g/3;
+    s.append(mk('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'var(--rule)','stroke-width':1}));
+    const t=mk('text',{x:L-7,y:Y(v)+3,'text-anchor':'end',class:'axlab'});t.textContent=fmt(v,2);s.append(t);}
+  P.run.true_step_frames.forEach(f=>s.append(mk('line',{x1:X(f),x2:X(f),y1:T,y2:H-B,stroke:'var(--soot)','stroke-width':1,opacity:.32})));
+  s.append(mk('line',{x1:X(P.run.true_extinction_frame),x2:X(P.run.true_extinction_frame),y1:T,y2:H-B,stroke:'var(--faint)','stroke-width':1,'stroke-dasharray':'3 3'}));
+  let d='',pen=false;
+  for(let i=0;i<n;i++){const v=y[i];
+    if(v==null||!isFinite(v)){pen=false;continue;}
+    d+=(pen?' L ':' M ')+X(i)+' '+Y(v);pen=true;}
+  s.append(mk('path',{d:d.trim(),fill:'none',stroke:colour,'stroke-width':1.7,'stroke-linejoin':'round'}));
+  const xa=mk('text',{x:L,y:H-7,class:'axlab'});xa.textContent='frame';s.append(xa);
+  bd.append(s);p.append(bd);container.append(p);
+}
+function morph(){const c=$('#morphcharts');c.innerHTML='';
+  line(c,'Projected flame area','area','px²','var(--chemi)');
+  line(c,'Aspect ratio, flow-axis length ÷ width','aspect_ratio','','var(--chemi)');
+  line(c,'Standoff, flame to fuel surface','standoff','px','var(--soot)');
+  line(c,'Sootiness index χ = (R−B)/(R+B)','sootiness_index','','var(--soot)');}
+
+/* ---------- states ---------- */
+const SC={IGNITION:'var(--soot)',GROWTH:'var(--soot)',QUASI_STEADY:'var(--chemi)',
+ TRANSITION:'var(--dim)',WEAKENING:'var(--warn)',EXTINCTION:'var(--warn)',
+ PRE_IGNITION:'var(--faint)',POST_EXTINCTION:'var(--faint)',RE_IGNITION:'var(--ok)'};
+function band(){const W=1080,H=58,n=P.run.n_frames;
+  const s=svg(W,H);s.dataset.chart=1;
+  P.states.forEach(st=>{const x0=(st.start/n)*W,x1=((st.end+1)/n)*W;
+    s.append(mk('rect',{x:x0,y:14,width:Math.max(x1-x0,1),height:22,fill:SC[st.state]||'var(--dim)',opacity:.82}));
+    if(x1-x0>92){const t=mk('text',{x:x0+5,y:29,class:'axlab',fill:'var(--duct)'});t.textContent=st.state;s.append(t);}});
+  P.run.detected_change_points.forEach(cp=>s.append(mk('line',{x1:(cp/n)*W,x2:(cp/n)*W,y1:8,y2:42,stroke:'var(--ink)','stroke-width':1.3})));
+  const a=mk('text',{x:0,y:52,class:'axlab'});a.textContent='frame 0';s.append(a);
+  const b=mk('text',{x:W,y:52,'text-anchor':'end',class:'axlab'});b.textContent='frame '+(n-1);s.append(b);
+  const w=el('div');w.style.padding='14px 16px';w.append(s);
+  $('#stateband').innerHTML='';$('#stateband').append(w);}
+(function(){const t=$('#statetable');
+ t.innerHTML='<thead><tr><th>Frames</th><th>State</th><th>Why the rule fired</th><th class="num">area slope /s</th><th class="num">CV</th></tr></thead>';
+ const tb=el('tbody');
+ P.states.forEach(s=>{const r=el('tr');
+  r.innerHTML=`<td class="mono">${s.start}–${s.end}</td>
+   <td><span class="chip" style="color:${SC[s.state]||'var(--dim)'}">${s.state}</span></td>
+   <td class="small">${s.note}</td>
+   <td class="num">${fmt(s.evidence.normalised_area_slope_per_s,4)}</td>
+   <td class="num">${fmt(s.evidence.coefficient_of_variation,3)}</td>`;
+  tb.append(r);});t.append(tb);})();
+
+/* ---------- EPI ---------- */
+$('#epidisc').innerHTML='<b>Research prototype — data-derived indicator.</b> '+
+ P.epi.disclaimer.replace('Research prototype - data-derived indicator. ','');
+function epiChart(){const W=520,H=210,L=46,R=44,T=20,B=30;
+  const e=P.series.epi,f=P.run.commanded_flow_cm_s,n=e.length;
+  const s=svg(W,H);s.dataset.chart=1;
+  const X=i=>L+(i/(n-1))*(W-L-R),Ye=v=>H-B-v*(H-T-B),mf=Math.max(...f)*1.1,Yf=v=>H-B-(v/mf)*(H-T-B);
+  for(let g=0;g<=4;g++){const v=g/4;
+   s.append(mk('line',{x1:L,x2:W-R,y1:Ye(v),y2:Ye(v),stroke:'var(--rule)','stroke-width':1}));
+   const t=mk('text',{x:L-7,y:Ye(v)+3,'text-anchor':'end',class:'axlab'});t.textContent=v.toFixed(2);s.append(t);
+   const u=mk('text',{x:W-R+6,y:Yf(mf*g/4)+3,class:'axlab'});u.textContent=(mf*g/4).toFixed(1);s.append(u);}
+  let df=`M ${X(0)} ${Yf(f[0])}`;
+  for(let i=1;i<n;i++){if(f[i]!==f[i-1])df+=` L ${X(i)} ${Yf(f[i-1])}`;df+=` L ${X(i)} ${Yf(f[i])}`;}
+  s.append(mk('path',{d:df,fill:'none',stroke:'var(--soot)','stroke-width':1.5,opacity:.85}));
+  let d='',pen=false;
+  for(let i=0;i<n;i++){const v=e[i];if(v==null||!isFinite(v)){pen=false;continue;}
+   d+=(pen?' L ':' M ')+X(i)+' '+Ye(v);pen=true;}
+  s.append(mk('path',{d:d.trim(),fill:'none',stroke:'var(--chemi)','stroke-width':2}));
+  const a=mk('text',{x:L,y:T-6,class:'axlab',fill:'var(--chemi)'});a.textContent='EPI (left)';s.append(a);
+  const b=mk('text',{x:W-R,y:T-6,'text-anchor':'end',class:'axlab',fill:'var(--soot)'});b.textContent='commanded flow, cm/s (right)';s.append(b);
+  $('#epichart').innerHTML='';$('#epichart').append(s);
+  const m=P.epi.monotonicity;
+  $('#epimono').innerHTML=`Spearman ρ against commanded flow: <span class="mono">${m.spearman_rho.toFixed(3)}</span> · status <span class="chip ${m.status==='CONSISTENT_WITH_EXPECTATION'?'c-ok':'c-warn'}">${m.status}</span><br><span style="color:var(--faint)">ρ &gt; −0.3 would be reported as NOT_SUPPORTED. That is the falsification route, and it is a reporting convention, not a significance test.</span>`;}
+function epiBars(){const k=P.keyframes[kf],b=$('#epibars');b.innerHTML='';
+  $('#epiathd').innerHTML=`Attribution at frame <span class="mono">${k.frame}</span> · EPI = <span class="mono">${fmt(k.epi,3)}</span>`;
+  if(!k.epi_attribution.length){b.append(el('p','small','No flame at this frame, so the index is undefined — not zero.'));return;}
+  const mx=Math.max(...k.epi_attribution.map(a=>a.contribution),1e-6);
+  k.epi_attribution.forEach(a=>{const r=el('div','bar');
+   r.innerHTML=`<span class="mono" style="font-size:11.5px;color:var(--dim)">${a.term}</span>
+    <span class="track"><span class="fill" style="width:${Math.max(2,(a.contribution/mx)*100)}%"></span></span>
+    <span class="v">${a.contribution.toFixed(3)}</span>`;b.append(r);});}
+(function(){const t=$('#epiterms');
+ t.innerHTML='<thead><tr><th>Term</th><th class="num">dir</th><th class="num">weight</th><th>Published observation it quantifies</th></tr></thead>';
+ const tb=el('tbody');
+ P.epi.terms.forEach(x=>{const r=el('tr');
+  r.innerHTML=`<td class="mono" style="font-size:12.5px">${x.feature}</td>
+   <td class="num" style="color:${x.direction>0?'var(--soot)':'var(--chemi)'}">${x.direction>0?'↑':'↓'}</td>
+   <td class="num">${x.weight.toFixed(2)}</td>
+   <td class="small">${x.rationale}<br><span style="color:var(--faint)">${x.source}</span></td>`;
+  tb.append(r);});t.append(tb);})();
+
+/* ---------- physics ---------- */
+(function(){const c=$('#phys');
+ P.physics.cases.forEach(x=>{const p=el('div','panel');
+  p.append(el('div','panel-hd',x.label));
+  const bd=el('div','panel-bd');
+  bd.append(el('div','mono',`<span style="font-size:26px">${fmt(x.value,3)}</span>`));
+  bd.append(el('div','kv',x.formula));
+  const ins=Object.entries(x.inputs).map(([k,v])=>`${k} = ${typeof v==='number'?fmt(v,4):v}`).join('<br>');
+  bd.append(el('p','small',`<span style="color:var(--faint)">inputs</span><br>${ins}`));
+  p.append(bd);c.append(p);});
+ const r=P.physics.ratios;
+ const p=el('div','panel');p.append(el('div','panel-hd','The point of all of this'));
+ p.append(el('div','panel-bd',`<p style="margin:0 0 10px;font-size:14.5px">Between 1 g and 10⁻⁶ g the Grashof number falls by <span class="mono">${r.grashof_1g_over_ug.toExponential(0)}</span>× and the buoyant velocity scale by <span class="mono">${r.buoyant_velocity_1g_over_ug.toExponential(0)}</span>×.</p>
+  <p style="margin:0;font-size:14.5px;color:var(--dim)">The flame-induced buoyant flow in normal gravity is of order <span class="mono">${P.physics.published_buoyant_flow_cm_s} cm/s</span> — larger than the 0.4–8 cm/s forced flows in these microgravity tests, and larger than spacecraft ventilation flows of order 10 cm/s. In free fall that transport channel is simply gone.</p>
+  <p class="small" style="margin-top:12px;color:var(--faint)">${P.physics.published_buoyant_flow_source}</p>`));
+ c.append(p);
+ $('#refusal').textContent=P.physics.refusal_demo;})();
+
+/* ---------- provenance ---------- */
+(function(){const m=P.provenance_example;if(!m)return;
+ const ul=$('#chain');
+ m.provenance.nodes.forEach((n,i)=>{const li=el('li');li.style.setProperty('--d',i);
+  li.innerHTML=`<span style="color:var(--faint)">${n.kind}</span> ${n.identifier}`+
+   (n.detail?`<br><span class="small" style="padding-left:${i*14+18}px">${n.detail}</span>`:'');
+  ul.append(li);});
+ const li=el('li');li.style.setProperty('--d',m.provenance.nodes.length);
+ li.innerHTML=`<span style="color:var(--faint)">result</span> <span style="color:var(--chemi)">${m.name}</span>`;
+ ul.append(li);
+ $('#measline').innerHTML=`<span class="chip c-dim">${m.level}</span> <span class="mono">${fmt(m.value,1)} ${m.unit} ± ${fmt(m.uncertainty,1)}</span><br>
+  <span style="color:var(--faint)">uncertainty kind: ${m.uncertainty_kind} · pipeline ${m.pipeline_version}</span>`;
+ $('#budget').textContent=(m.note||'').trim();})();
+
+/* ---------- validation tables ---------- */
+(function(){const v=P.validation.segmentation,t=$('#vseg');
+ t.innerHTML='<thead><tr><th>Metric</th><th class="num">Value</th></tr></thead>';
+ const tb=el('tbody');
+ [['frames scored',v.n_frames_scored],['IoU, mean',v.iou_mean.toFixed(4)],
+  ['IoU, median',v.iou_median.toFixed(4)],['IoU, 5th percentile',v.iou_p05.toFixed(4)],
+  ['IoU, minimum',v.iou_min.toFixed(4)],['Dice, mean',v.dice_mean.toFixed(4)],
+  ['false positives on empty frames',v.false_positive_frames_when_no_flame],
+  ['detection size limit',v.detection_size_limit_px+' px'],
+  ['frames below that limit',v.frames_below_detection_size_limit.length],
+  ['frames missed above the limit',v.frames_missed_above_size_limit.length],
+  ['IoU with the telemetry overlay left in',v.ablation_no_overlay_exclusion.iou_mean.toFixed(4)],
+  ['segmentation uncertainty (threshold sweep)',(P.validation.segmentation_uncertainty_sweep.area_relative_cv*100).toFixed(1)+' %'],
+ ].forEach(([k,x])=>{const r=el('tr');r.innerHTML=`<td>${k}</td><td class="num">${x}</td>`;tb.append(r);});
+ t.append(tb);
+ const a=P.validation.change_point_detection.alignment_to_all_known_events;
+ const b=P.validation.change_point_detection.alignment_to_commanded_flow_steps_only;
+ const t2=$('#vcp');
+ t2.innerHTML='<thead><tr><th>Metric</th><th class="num">flow steps only</th><th class="num">+ ignition &amp; extinction</th></tr></thead>';
+ const tb2=el('tbody');
+ [['reference events','n_reference_events'],['detected','n_detected'],
+  ['true positives','true_positives'],['false positives','false_positives'],
+  ['false negatives','false_negatives'],['precision','precision'],
+  ['recall','recall'],['F1','f1'],['mean |offset|, frames','mean_abs_offset_frames']
+ ].forEach(([k,key])=>{const f=x=>typeof x==='number'&&!Number.isInteger(x)?x.toFixed(3):x;
+  const r=el('tr');r.innerHTML=`<td>${k}</td><td class="num">${f(b[key])}</td><td class="num">${f(a[key])}</td>`;tb2.append(r);});
+ t2.append(tb2);})();
+
+function draw(){staircase();morph();band();epiChart();renderFrame();}
+draw();
+</script>
+</body>
+</html>

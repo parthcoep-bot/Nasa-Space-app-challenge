@@ -1,0 +1,16 @@
+# FLARE-X scientific pipeline. Deliberately small: no deep-learning framework,
+# no LLM client, no cloud SDK. Everything needed to reproduce every number in
+# VALIDATION.md is in this list.
+numpy>=1.24
+scipy>=1.10
+pandas>=2.0
+scikit-image>=0.21
+scikit-learn>=1.3
+opencv-python-headless>=4.8
+matplotlib>=3.7
+pytest>=7.4
+
+# Optional, for the FastAPI backend that serves the web interface.
+# The analysis pipeline does not import these.
+# fastapi>=0.110
+# uvicorn>=0.27
