@@ -23,9 +23,10 @@ As human exploration expands toward the Lunar Artemis basecamp and crewed transi
 
 ## 2. Link to Project Demo
 
-- **Official 7-Slide Deck (Direct Download .PPTX):** [https://github.com/parthcoep-bot/Nasa-Space-app-challenge/raw/main/FLARE-X_NASA_Space_Apps_7Slides.pptx](https://github.com/parthcoep-bot/Nasa-Space-app-challenge/raw/main/FLARE-X_NASA_Space_Apps_7Slides.pptx)
+- **Official 7-Slide Deck (Direct Download .PPTX - Final Submission):** [https://github.com/parthcoep-bot/Nasa-Space-app-challenge/raw/main/FLARE-X_Final_Submission.pptx](https://github.com/parthcoep-bot/Nasa-Space-app-challenge/raw/main/FLARE-X_Final_Submission.pptx)
 - **7-Slide Deck Web View (GitHub Docs):** [https://github.com/parthcoep-bot/Nasa-Space-app-challenge/blob/main/docs/SLIDE_DECK.md](https://github.com/parthcoep-bot/Nasa-Space-app-challenge/blob/main/docs/SLIDE_DECK.md)
 - **Interactive Live Dashboard:** [https://parthcoep-bot.github.io/Nasa-Space-app-challenge/](https://parthcoep-bot.github.io/Nasa-Space-app-challenge/)
+- **Interactive Dashboard Mirror (Instant Web Preview):** [https://htmlpreview.github.io/?https://github.com/parthcoep-bot/Nasa-Space-app-challenge/blob/main/index.html](https://htmlpreview.github.io/?https://github.com/parthcoep-bot/Nasa-Space-app-challenge/blob/main/index.html)
 - **Demo Slides & Video Presentation Content:** Detailed below in strict compliance with the NASA Space Apps submission limits (Maximum 7 slides OR ≤30s video).
 
 ---
