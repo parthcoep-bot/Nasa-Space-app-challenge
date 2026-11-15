@@ -194,6 +194,15 @@ Our ultimate goal is to bridge the gap between historical ISS flight experiments
 4. Advance terrestrial firefighter and industrial worker safety by open-sourcing low-SWaP optical detection algorithms that differentiate between inert dust and low-visibility flames in confined tunnels and mines.
 5. Provide a free, MIT-licensed microgravity combustion learning tool for universities and fire academies worldwide that runs instantly without expensive GPU clusters.
 
+### Multi-Scale & Multi-Dataset Synthesis (How These Datasets Power FLARE-X)
+To solve the microgravity combustion challenge comprehensively, FLARE-X integrates across multiple NASA and international space agency flight datasets across spatial and physical scales:
+- **Micro-Scale Glovebox Flame Spread (NASA BASS & BASS-II):** Primary benchmark for solid fuel rod pyrolysis, opposed forced flow velocities (0.4–8 cm/s), and camera burned-in telemetry change points.
+- **Large-Scale Vehicle Fire Safety (NASA Saffire I–VI):** Informs compartment-scale flame growth, airflow interactions, and elevated oxygen concentrations ($34\%\text{ O}_2$, $8.2\text{ psia}$) in automated Cygnus spacecraft before atmospheric disposal.
+- **Cool Flame Chemiluminescence (NASA FLEX & FLEX-2):** Benchmarks low-temperature, invisible hydrocarbon reactions that persist after visible soot combustion stops, validating FLARE-X's soot-independent blue radiance proxy.
+- **Condensed Fuel Gas Emulation (NASA ACME BRE):** Provides kinetic burn-rate validation by comparing gaseous diffusion burner outputs against solid-fuel pyrolysis models.
+- **Partial Gravity Lunar/Mars Extinction (JAXA FLARE on Kibo):** Extends microgravity insights ($10^{-6}\text{ g}$) to Lunar ($0.166\text{ g}$) and Martian ($0.38\text{ g}$) surface gravities, defining safe ventilation thresholds for Artemis and Mars habitats.
+- **Terrestrial Ground-Truth Modeling (NIST FDS & NASA FIRMS):** Bridges spaceflight kinetics with terrestrial thermal sensor calibration and building/tunnel fluid dynamics.
+
 ### What tools, coding languages, hardware, or software did you use?
 - **Programming Languages:** Python 3.11 / 3.12 / 3.14, Modern HTML5 / CSS3 / Vanilla JavaScript (ES2022).
 - **Computer Vision & Scientific Computing:** NumPy, SciPy, Scikit-Image, Scikit-Learn, OpenCV (Headless), Matplotlib, Pandas.
@@ -242,7 +251,12 @@ In accordance with the NASA Space Apps Challenge Submission requirements, enter 
 | **10** | New Technology for the Fire Attire | `https://spinoff.nasa.gov/node/9918` |
 | **11** | NASA Physical Sciences Informatics (PSI) User Registration | `https://psiuserregistration.ndc.nasa.gov/` |
 | **12** | NASA Materials Testing Standards (NASA-STD-6001B) | `https://standards.nasa.gov/standard/nasa/nasa-std-6001` |
-| **13** | NASA SoFIE Project Overview | `https://www.nasa.gov/mission/sofie/` |
+| **13** | NASA SoFIE: Solid Fuel Ignition and Extinction Project | `https://www.nasa.gov/mission/sofie/` |
+| **14** | NASA Saffire: Spacecraft Fire Safety Demonstration Project (Saffire I-VI) | `https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/saffire/` |
+| **15** | NASA PSI: ACME Advanced Combustion via Microgravity Experiments | `https://psi.nasa.gov/physci/repo/search?q=ACME` |
+| **16** | NASA PSI: FLEX Flame Extinguishment Experiment (Cool Flames) | `https://psi.nasa.gov/physci/repo/search?q=FLEX` |
+| **17** | NASA Open Science Data Repository (OSDR) | `https://osdr.nasa.gov/` |
+| **18** | NASA FIRMS: Fire Information for Resource Management System | `https://firms.modaps.eosdis.nasa.gov/` |
 
 ---
 
@@ -257,6 +271,9 @@ Enter the following pairs into the **Space Agency Partner & Other Data** section
 | **3** | JAXA Kibo Microgravity Science Utilization | `https://humans-in-space.jaxa.jp/en/kibo/` |
 | **4** | ICES 2014 BASS-II Flight Experiment Overview | `https://ttu-ir.tdl.org/handle/2346/59938` |
 | **5** | Truong et al. Change Point Detection Review | `https://doi.org/10.1016/j.sigpro.2019.107299` |
+| **6** | JAXA Kibo FLARE: Flammability Limits At Reduced Gravity Experiment | `https://humans-in-space.jaxa.jp/en/biz-lab/experiment/theme/detail/000787.html` |
+| **7** | NIST Fire Dynamics Simulator (FDS) & Material Pyrolysis Database | `https://www.nist.gov/el/fire-research-division-73300/fire-dynamics-simulator-fds-and-smokeview-smv` |
+| **8** | ESA Physical Sciences Microgravity Combustion Research (CIMEX) | `https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Research/Physical_Sciences` |
 
 ---
 
