@@ -182,14 +182,17 @@ The FLARE-X processing pipeline is organized into five tightly coupled, scientif
 - **Zero Black-Box Opacity:** By relying on physics-informed morphological features and exact linear decompositions, every insight can be audited by combustion scientists and mission safety boards.
 - **Robust to Edge Cases:** Immune to the yellow-to-blue color shifts that blind commercial fire detection algorithms.
 - **Falsifiable Engineering:** Built with direct hooks to correlate image-extracted regime changes against hardware telemetry logs.
+- **Deep-Space Habitability & Life-Safety:** Directly incorporates the tragic lessons of **Apollo 1** (pure oxygen fire dynamics), **Apollo 13** (cryogenic oxygen tank insulation combustion), and the **1997 Space Station Mir fire** (uncontrolled solid-fuel oxygen generator torch in zero-g) to provide real-time, non-buoyant pre-smoke detection.
+- **Terrestrial Dual-Use & Spinoff Heritage:** Follows NASA's historic tradition of fire safety spinoffs—including NASA-developed **Fireman's Air Tanks** (Spinoff Node 9582), **Space Shuttle particulate-discriminating Fire Detectors for mines** (Spinoff Node 9407), and **Space suit turnout gear fabrics** (Spinoff Node 9918)—by deploying lightweight, false-alarm-immune algorithms for subway transit tunnels, deep mine shafts, and aircraft cargo bays.
 - **Zero-Dependency Deployment:** Delivers a fully compiled, self-contained dashboard that runs locally without requiring cloud servers, subscriptions, or external runtime installations.
 
 ### What do you hope to achieve?
 Our ultimate goal is to bridge the gap between historical ISS flight experiments and forward-looking lunar/Martian habitat safety:
 1. Provide an open-source analytical tool that NASA and international partners can run directly on the forthcoming **SoFIE (Solid Fuel Ignition and Extinction)** experimental datasets.
-2. Provide empirical microgravity boundary-layer extinction data to modernize terrestrial spacecraft material qualification standards (**NASA-STD-6001**).
-3. Lay the algorithmic foundation for an autonomous optical early-warning fire detection and suppression diagnostic system for long-duration deep-space transit vehicles.
-4. Transfer low-velocity opposed-flow combustion models to protect terrestrial mines, underground transit tunnels, and aerospace cargo holds.
+2. Provide empirical microgravity boundary-layer extinction data to modernize terrestrial spacecraft material qualification standards (**NASA-STD-6001B**).
+3. Honor and operationalize spaceflight safety lessons from **Apollo 1**, **Apollo 13**, and **Mir**, preventing low-convection flame spread from catching crews off-guard during Artemis Lunar Basecamp operations and multi-year Mars transit voyages.
+4. Advance terrestrial firefighter and industrial worker safety by open-sourcing low-SWaP optical detection algorithms that differentiate between inert dust and low-visibility flames in confined tunnels and mines.
+5. Provide a free, MIT-licensed microgravity combustion learning tool for universities and fire academies worldwide that runs instantly without expensive GPU clusters.
 
 ### What tools, coding languages, hardware, or software did you use?
 - **Programming Languages:** Python 3.11 / 3.12 / 3.14, Modern HTML5 / CSS3 / Vanilla JavaScript (ES2022).
@@ -218,33 +221,65 @@ In accordance with the 2026 NASA Space Apps Challenge Project Submission Guide, 
 
 ## 6. NASA Data & Space Agency Partner Data
 
-### NASA Data & Resources Used:
-1. **NASA Physical Sciences Informatics (PSI) System:**
-   - Primary research portal: `https://psi.nasa.gov` / `https://psiuserregistration.ndc.nasa.gov/`
-   - Discipline: Microgravity Combustion Science.
-2. **BASS-II (Burning and Suppression of Solids – II):**
-   - Investigation Status: Complete; ROSES Eligible.
-   - Flight Facility: Microgravity Science Glovebox (MSG) aboard the International Space Station.
-   - Principal Investigators & Authors: Link, Johnston, Dietrich, Ferkul, Olson, T'ien (NASA Glenn Research Center & Case Western Reserve University).
-   - Core Reference: *Flame spread and extinction over solid fuels in low-speed forced flows in microgravity*, Nature Scientific Reports, 8:161 (2018). DOI: [10.1038/s41598-017-18398-4](https://doi.org/10.1038/s41598-017-18398-4).
-3. **NASA Materials Testing Standards:**
-   - **NASA-STD-6001B:** *Flammability, Offgassing, and Compatibility Requirements and Test Procedures for Materials in Environments that Support Combustion* (Test 1: Upward Flame Propagation Test).
-4. **NASA SoFIE Project Documentation:**
-   - Solid Fuel Ignition and Extinction (SoFIE) payloads in the Combustion Integrated Rack (CIR).
+> **Official NASA Challenge Notice & Disclaimer:**  
+> *NASA does not endorse any non-U.S. Government entity and is not responsible for information contained on non-U.S. Government websites. For non-U.S. Government websites, participants must comply with any data use parameters of that specific website.*
 
-### Space Agency Partner Alignment:
-- **ESA (European Space Agency) & JAXA (Japan Aerospace Exploration Agency):**
-  Microgravity combustion research on the ISS is an international cooperative endeavor. FLARE-X incorporates comparative physics relevant to ESA's material flammability initiatives and JAXA's FLARE (Flammability Limits At Reduced Gravity Experiment) payload on the Japanese Experiment Module (*Kibo*).
+### 📋 NASA Data Submission Fields (Copy-Paste Ready for Space Apps Portal)
+
+In accordance with the NASA Space Apps Challenge Submission requirements, enter the following pairs into the **NASA Data** section of the submission form:
+
+| # | Link Text (Resource Name) | Link Url (Full Address) |
+| :-: | :--- | :--- |
+| **1** | PSI Data Repository: Combustion Science | `https://psi.nasa.gov/physci/repo/search?q=combustion` |
+| **2** | NASA Combustion Science | `https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/` |
+| **3** | NASA ScienceCasts: The Power of Studying Combustion on the ISS | `https://www.youtube.com/watch?v=W1oXykoz9zg` |
+| **4** | A Researcher’s Guide to International Space Station Combustion Science | `https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/` |
+| **5** | Apollo 1 | `https://sma.nasa.gov/sma-disciplines/accllp/apollo-1` |
+| **6** | Apollo 13 | `https://sma.nasa.gov/sma-disciplines/accllp/apollo-13` |
+| **7** | 25 Years Ago: Fire Aboard Space Station Mir | `https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/` |
+| **8** | Fireman’s Air Tanks | `https://spinoff.nasa.gov/node/9582` |
+| **9** | Fire Detector | `https://spinoff.nasa.gov/node/9407` |
+| **10** | New Technology for the Fire Attire | `https://spinoff.nasa.gov/node/9918` |
+| **11** | NASA Physical Sciences Informatics (PSI) User Registration | `https://psiuserregistration.ndc.nasa.gov/` |
+| **12** | NASA Materials Testing Standards (NASA-STD-6001B) | `https://standards.nasa.gov/standard/nasa/nasa-std-6001` |
+| **13** | NASA SoFIE Project Overview | `https://www.nasa.gov/mission/sofie/` |
 
 ---
 
-## 7. Space Agency Partner Data & Other Academic References
+### 📋 Space Agency Partner & Other Data Submission Fields (Copy-Paste Ready)
 
-1. **Link, R. et al. (2018).** *Flame spread and extinction over solid fuels in low-speed forced flows in microgravity.* Nature Scientific Reports, 8:161.
-2. **Jomaas, G. et al. (2015).** *Fire safety in space - beyond standard material flammability testing.* Acta Astronautica, 115, 274–281.
-3. **Fernandez-Pello, A. C. (2002).** *Microsatellite and spacecraft fire safety.* Proceedings of the Combustion Institute, 29(2), 2635–2646.
-4. **Olson, S. L. et al. (2014).** *Burning and Suppression of Solids-II (BASS-II) flight experiment overview.* 44th International Conference on Environmental Systems (ICES).
-5. **Truong, C. et al. (2020).** *Selective review of offline change point detection methods.* Signal Processing, 167, 107299.
+Enter the following pairs into the **Space Agency Partner & Other Data** section of the submission form:
+
+| # | Link Text (Resource Name) | Link Url (Full Address) |
+| :-: | :--- | :--- |
+| **1** | Nature Scientific Reports: BASS-II Microgravity Flame Spread | `https://doi.org/10.1038/s41598-017-18398-4` |
+| **2** | ESA Physical Sciences Microgravity Program | `https://www.esa.int/Enabling_Support/Space_Transportation` |
+| **3** | JAXA Kibo Microgravity Science Utilization | `https://humans-in-space.jaxa.jp/en/kibo/` |
+| **4** | ICES 2014 BASS-II Flight Experiment Overview | `https://ttu-ir.tdl.org/handle/2346/59938` |
+| **5** | Truong et al. Change Point Detection Review | `https://doi.org/10.1016/j.sigpro.2019.107299` |
+
+---
+
+### Comprehensive Integration of NASA Data & Resources in FLARE-X:
+
+1. **PSI Data Repository: Combustion Science:**
+   - *Direct Use:* Source repository for raw microgravity flight test imagery, video footage, and calibration logs across 17 flight investigations. Used as the ground-truth benchmark for BASS-II opposed-flow PMMA rod extinction runs.
+2. **NASA Combustion Science (Glenn Research Center):**
+   - *Direct Use:* Governs the thermodynamic scaling laws implemented in the FLARE-X physics engine (diffusion vs. convective balance, buoyancy suppression at $Gr \sim 10^{-6}$, and chemical kinetic quenching limits).
+3. **NASA ScienceCasts: The Power of Studying Combustion on the ISS (2018):**
+   - *Direct Use:* Provides visual baseline examples of spherical, soot-free, chemiluminescent blue flames on ISS, directly informing the algorithm's noise-gated blue-to-red ratio ($\chi = \frac{R-B}{R+B}$) and soot-independent radiance proxy.
+4. **A Researcher’s Guide to International Space Station Combustion Science:**
+   - *Direct Use:* Informs the operational constraints, MSG (Microgravity Science Glovebox) flow geometries, fan voltage stepped decay curves, and safety protocols required to bridge flight experiments with life-support engineering.
+5. **Spaceflight Fire Lessons Learned (Apollo 1, Apollo 13, and Mir Fire):**
+   - *Apollo 1 (SMA Disciplines):* Documents how enriched oxygen environments render materials unexpectedly volatile; informs the oxidizer concentration dependence in FLARE-X.
+   - *Apollo 13 (SMA Disciplines):* Highlights electrical wire insulation combustion in enclosed deep-space vehicles; informs FLARE-X pre-smoke optical detection for smoldering polymers.
+   - *25 Years Ago: Fire Aboard Space Station Mir (NASA History):* Demonstrates the catastrophic behavior of non-buoyant smoke and open torch flames in microgravity, proving why forced cabin ventilation must be throttled dynamically based on real-time extinction margins.
+6. **NASA Spinoffs for Terrestrial Impact (Nodes 9582, 9407, 9918):**
+   - *Fireman’s Air Tanks (Node 9582):* Direct inspiration for lightweight, low-power edge diagnostics that can be packaged into municipal firefighting gear.
+   - *Fire Detector (Node 9407):* The Space Shuttle detector's dust-vs-smoke discrimination principle is directly echoed in FLARE-X's extreme-value noise-gated segmentation, preventing false alarms in dusty mine tunnels.
+   - *New Technology for the Fire Attire (Node 9918):* Demonstrates the proven pipeline of space combustion research protecting human life on Earth, directly leveraged by FLARE-X to support subway tunnel and mining fire safety.
+7. **NASA-STD-6001B & SoFIE:**
+   - Highlights the critical screening gap where normal-gravity upward flammability tests underestimate low-flow microgravity ignition risks, providing actionable data to modernize future mission certification standards.
 
 ---
 

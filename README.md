@@ -122,6 +122,23 @@ requires individual registration; users obtain data under their own account, whi
 keeps attribution and terms of use intact. `scripts/acquire_psi.py` makes a manual
 download reproducible by hashing every file and pinning results to those hashes.
 
+> **Official NASA Challenge Notice & Disclaimer:**  
+> *NASA does not endorse any non-U.S. Government entity and is not responsible for information contained on non-U.S. Government websites. For non-U.S. Government websites, participants must comply with any data use parameters of that specific website.*
+
+### NASA Data, Resources & Spinoffs Catalog
+FLARE-X is built directly upon the official suite of NASA combustion science data, safety lessons, and technological spinoffs:
+
+1. **[PSI Data Repository: Combustion Science](https://psi.nasa.gov/physci/repo/search?q=combustion):** Physical Sciences Informatics source of experimental microgravity combustion data (BASS, BASS-II, ACME, FLEX, CIR).
+2. **[NASA Combustion Science](https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/):** Core microgravity combustion physics, droplet burning, and flame spread research at NASA Glenn Research Center.
+3. **[NASA ScienceCasts: The Power of Studying Combustion on the ISS](https://www.youtube.com/watch?v=W1oXykoz9zg):** Foundational multimedia review of soot-free spherical diffusion flames and microgravity combustion fundamentals.
+4. **[A Researcher’s Guide to International Space Station Combustion Science](https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/):** Comprehensive 50+ page guide detailing ISS flight facilities (Microgravity Science Glovebox, Combustion Integrated Rack) and flight protocols.
+5. **[Apollo 1 Safety & Mission Assurance Review](https://sma.nasa.gov/sma-disciplines/accllp/apollo-1):** Lessons learned on pure oxygen fire dynamics, flashover acceleration, and spacecraft interior material selection.
+6. **[Apollo 13 Lessons Learned](https://sma.nasa.gov/sma-disciplines/accllp/apollo-13):** Investigation of cryogenic oxygen tank electrical wire insulation ignition during translunar transit.
+7. **[25 Years Ago: Fire Aboard Space Station Mir](https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/):** Analysis of the 1997 solid oxygen generator torch fire and the unique hazards of non-buoyant smoke obscuration in microgravity.
+8. **[Fireman’s Air Tanks (NASA Spinoff Node 9582)](https://spinoff.nasa.gov/node/9582):** 1970s adaptation of space life-support lightweight composite pressure vessels into municipal firefighter breathing gear.
+9. **[Fire Detector (NASA Spinoff Node 9407)](https://spinoff.nasa.gov/node/9407):** Space Shuttle cabin optical sensor discriminating between smoke aerosols and particulate dust; transitioned to mining operations.
+10. **[New Technology for the Fire Attire (NASA Spinoff Node 9918)](https://spinoff.nasa.gov/node/9918):** Transfer of spacesuit thermal barriers and flame-resistant PBI textiles to modern firefighter turnout clothing.
+
 Full dataset review, including the investigations we examined and **rejected**, is
 in [DATA_SOURCES.md](DATA_SOURCES.md).
 

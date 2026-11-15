@@ -175,3 +175,67 @@ conditions. That is precisely why NASA's own SoFIE objectives include validating
 flammability protocols for low-gravity fires.
 
 **FLARE-X produces no pass/fail determination against this or any standard.**
+
+---
+
+## 7. Official NASA Challenge Data & Resources Catalog
+
+The table below catalogs all official NASA resources, data repositories, historical investigations, and technological spinoffs designated for the *Flame in Freefall* challenge:
+
+| Resource Name | Source URL | Type / Purpose | Role in FLARE-X |
+| :--- | :--- | :--- | :--- |
+| **PSI Data Repository: Combustion Science** | [https://psi.nasa.gov/physci/repo/search?q=combustion](https://psi.nasa.gov/physci/repo/search?q=combustion) | Primary Data Repository | Open source of microgravity combustion flight data (BASS, BASS-II, CIR payloads). |
+| **NASA Combustion Science** | [https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/](https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/) | Research Overview (Glenn) | Foundational physics of microgravity combustion, droplet burning, solid flame spread, and soot dynamics. |
+| **NASA ScienceCasts: The Power of Studying Combustion on the ISS** | [https://www.youtube.com/watch?v=W1oXykoz9zg](https://www.youtube.com/watch?v=W1oXykoz9zg) | Multimedia Education (2018) | Explains spherical diffusion flames, soot suppression, and non-buoyant combustion dynamics on ISS. |
+| **A Researcher’s Guide to International Space Station Combustion Science** | [https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/](https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/) | Comprehensive Reference (50+ pgs) | Authoritative review of ISS combustion hardware (MSG, CIR, MDCA), experimental protocols, and safety envelopes. |
+| **Apollo 1** | [https://sma.nasa.gov/sma-disciplines/accllp/apollo-1](https://sma.nasa.gov/sma-disciplines/accllp/apollo-1) | Safety & Mission Assurance (SMA) | 1967 pre-launch test fire; lessons on pure oxygen environments, rapid ignition, and material screening. |
+| **Apollo 13** | [https://sma.nasa.gov/sma-disciplines/accllp/apollo-13](https://sma.nasa.gov/sma-disciplines/accllp/apollo-13) | Safety & Mission Assurance (SMA) | 1970 translunar oxygen tank wire insulation combustion; electrical fire isolation in closed life-support loops. |
+| **25 Years Ago: Fire Aboard Space Station Mir** | [https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/](https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/) | Historical Incident Review | 1997 solid oxygen generator fire; lessons on microgravity smoke obscuration, toxic offgassing, and escape route compromise. |
+| **Fireman’s Air Tanks** | [https://spinoff.nasa.gov/node/9582](https://spinoff.nasa.gov/node/9582) | NASA Spinoff (1970s) | Rocket motor lightweight composite materials adapted into firefighter self-contained breathing apparatus (SCBA). |
+| **Fire Detector** | [https://spinoff.nasa.gov/node/9407](https://spinoff.nasa.gov/node/9407) | NASA Spinoff (1970s) | Space Shuttle optical ionization detector discriminating between smoke and particulate dust; applied to mining operations. |
+| **New Technology for the Fire Attire** | [https://spinoff.nasa.gov/node/9918](https://spinoff.nasa.gov/node/9918) | NASA Spinoff (1980s) | Spacesuit thermal insulation & PBI flame-resistant fabrics transitioned to municipal firefighter protective turnout gear. |
+
+---
+
+## 8. Spaceflight Fire Lessons Learned: From Apollo to Artemis & Mars
+
+### 1. Apollo 1 (January 27, 1967)
+- **The Event:** A cabin fire erupted in Apollo Command Module 204 during a simulated countdown test, killing astronauts Virgil Grissom, Edward White, and Roger Chaffee.
+- **Root Cause & Environmental Factor:** A high-pressure, 100% pure oxygen environment ($16.7\text{ psia}$) caused materials considered fire-resistant in normal atmospheric air (nylon, Velcro, wiring insulation) to burn explosively, reaching catastrophic temperatures in under 15 seconds.
+- **Architectural Impact on FLARE-X:** Apollo 1 underscored that flammability is not an inherent material property, but a function of atmosphere, flow, and pressure. FLARE-X’s regime classifier explicitly tracks oxidizer concentration and forced flow velocity rather than relying on static flammability tables.
+
+### 2. Apollo 13 (April 13, 1970)
+- **The Event:** An explosion and oxygen depletion crippled the Service Module during translunar coast, jeopardizing the lives of astronauts Jim Lovell, Jack Swigert, and Fred Haise.
+- **Root Cause:** Damaged Teflon insulation on electrical wiring ignited inside Oxygen Tank No. 2 following thermostatic switch failure during cryogenic tank stirring.
+- **Architectural Impact on FLARE-X:** In deep space, electrical insulation smoldering and low-current heating can trigger catastrophic ignition without initial open flames. FLARE-X incorporates pre-smoke early warning by detecting subtle spectral shifts (radiance proxy elevation and blue-channel chemiluminescence) before large-scale particulate smoke triggers traditional ionization chambers.
+
+### 3. Space Station Mir Fire (February 23, 1997)
+- **The Event:** During joint Shuttle-Mir operations, a solid-fuel oxygen generation candle (Vika / TGK canister) ruptured, producing an uncontrolled, 14-minute blowtorch flame in the Kvant-1 module.
+- **Microgravity Combustion Hazard:** Without buoyant convection ($Gr \approx 0$), the flame did not rise; instead, it spewed a horizontal column of molten metal droplets and dense, suffocating smoke throughout the station. Smoke clung to surfaces and filled compartments uniformly, blinding the crew, overwhelming respirators, and blocking access to one of the docked Soyuz escape capsules.
+- **Architectural Impact on FLARE-X:** The Mir fire proved that microgravity ventilation ($0.4\text{ to }8\text{ cm/s}$) keeps fires alive while denying crew natural escape paths. FLARE-X's Extinction Proximity Index (EPI) is specifically designed to provide quantitative margins of how close a burning item is to extinction under forced ventilation throttling, empowering automated life-support systems (ECLSS) to suppress fires without suffocating crew.
+
+---
+
+## 9. NASA Spinoffs & Terrestrial Technology Transfer
+
+NASA's space fire research has repeatedly transformed human safety on Earth. FLARE-X explicitly positions its algorithms to advance three historic NASA spinoff pathways:
+
+1. **Lightweight Breathing Apparatus (NASA Spinoff Node 9582):**
+   - *NASA Heritage:* In 1971, NASA adapted lightweight composite pressure vessels and telemetry from Apollo portable life-support systems to replace heavy steel SCBA tanks used by city firefighters.
+   - *FLARE-X Extension:* By providing automated, low-power flame segmentation that runs on edge processors, FLARE-X algorithms can be integrated into next-generation heads-up displays (HUDs) on firefighter SCBA masks to highlight low-visibility blue alcohol or gas flames in industrial firefighting.
+
+2. **False-Alarm-Immune Shuttle Fire Detection (NASA Spinoff Node 9407):**
+   - *NASA Heritage:* NASA developed an optical smoke detector for the Space Shuttle that used dual-wavelength scattering to distinguish between combustible smoke particles and inert dust, drastically reducing false alarms in zero-gravity. It was subsequently licensed for commercial mine shaft safety.
+   - *FLARE-X Extension:* Mining shafts and subway tunnels share the same low-ceiling, forced horizontal air-flow dynamics as microgravity combustion gloveboxes. FLARE-X’s soot-independent radiance proxy suppresses false alarms caused by airborne diesel particulate and mineral dust in subways and mines.
+
+3. **Advanced Protective Fire Attire (NASA Spinoff Node 9918):**
+   - *NASA Heritage:* After Apollo 1, NASA partnered with industry to develop Polybenzimidazole (PBI) and thermal barriers for astronaut suits, which became the global standard for structural firefighting turnout gear.
+   - *FLARE-X Extension:* Provides universities, fire testing laboratories, and protective equipment manufacturers with an open-source, non-GPU computer vision tool to quantify material flame spread rates and boundary-layer extinction dynamics under varied air ventilation speeds.
+
+---
+
+## 10. NASA Non-Endorsement & Third-Party Disclaimer
+
+> **Official Disclaimer:**
+> NASA does not endorse any non-U.S. Government entity and is not responsible for information contained on non-U.S. Government websites. For non-U.S. Government websites, participants must comply with any data use parameters of that specific website.
+

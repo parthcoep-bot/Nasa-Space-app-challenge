@@ -13,3 +13,8 @@ flare-x-repo/
 files (2)/
 .DS_Store
 Thumbs.db
+
+~$*
+*.egg-info/
+analysis/flarex.egg-info/
+uv.lock

@@ -110,12 +110,14 @@
 - **Slide Title:** Deep-Space Habitation & Earth Fire Safety Spin-Offs
 - **Galactic Impact (Space Exploration):**
   - Informs flammability safety rules for Lunar Gateway, Artemis Moon Basecamp, and crewed Mars transits.
+  - Operationalizes lessons from **Apollo 1** (oxygen flashover), **Apollo 13** (electrical wire fires), and **Mir** (14-min microgravity torch fire).
   - Direct analytical bridge to **NASA SoFIE (Solid Fuel Ignition & Extinction)** active experiments on the ISS.
 - **Best Mission Concept (Spacecraft Flight Architecture):**
   - Tier-1 edge optical monitoring: real-time flame standoff and blueness drift detection running on low-SWaP flight hardware before smoke alarms trigger.
-- **Local Impact & Global Connection (Earth Safety & Education):**
+- **Local Impact & Global Connection (NASA Spinoff Lineage & Earth Safety):**
+  - **NASA Spinoff Lineage:** Continues NASA's legacy of firefighter innovations—from **Fireman's Air Tanks (Node 9582)**, **Shuttle Dust-Discriminating Mine Fire Detectors (Node 9407)**, and **Protective Fire Attire (Node 9918)**.
   - **Terrestrial Mine & Subway Safety:** Low-velocity opposed flows accurately model horizontal flame spread in ceiling-constrained subway tunnels, mining shafts, and aircraft cargo compartments.
   - **Global Open STEM Science:** Freely available MIT-licensed tool empowering students and fire engineers worldwide without expensive CFD licenses.
 - **Visual Composition:** System architecture connecting Optical Sensors $\to$ Edge FLARE-X $\to$ Habitat ECLSS Suppression, paired with an illustration of underground subway tunnel ventilation safety.
 - **Speaker Note (90–105s):**  
-  "FLARE-X impacts exploration from the Moon to Mars by transforming how we qualify materials for microgravity. But its physics also protects Earth—in underground subway tunnels and mine shafts where ceiling constraints mimic space combustion. Decades of NASA data, now accessible to protect human lives anywhere."
+  "FLARE-X impacts exploration from the Moon to Mars by turning tragic lessons from Apollo and Mir into predictive extinction margins. But it also continues NASA's 50-year spinoff heritage—from lightweight firefighter air tanks to Shuttle mine safety detectors—protecting subway tunnels, miners, and firefighters right here on Earth. Decades of NASA data, now accessible to protect human lives anywhere."
